@@ -54,9 +54,15 @@ ColorList = [
 
 
 
+BeforePiece = input("Before ")
+BeforePiece = int(BeforePiece)
+AfterPiece = input("After ")
+AfterPiece = int(AfterPiece)
 
 
-
+#gekloot
+PieceList.pop(BeforePiece)
+ColorList.pop(BeforePiece)
 
 PieceDict = {
     0 : " ",
