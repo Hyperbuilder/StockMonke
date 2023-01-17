@@ -1,14 +1,14 @@
 class GameState():
     def __init__(self):
         self.board = [
-            ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bK'],
-            ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+            ['RB', 'NB', 'BB', 'QB', 'KB', 'BB', 'NB', 'RB'],
+            ['PB', 'PB', 'PB', 'PB', 'PB', 'PB', 'PB', 'PB'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
-            ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wK'],
+            ['PW', 'PW', 'PW', 'PW', 'PW', 'PW', 'PW', 'PW'],
+            ['RW', 'NW', 'BW', 'QW', 'KW', 'BW', 'NW', 'RW'],
         ];
         self.whiteToMove = True
         self.moveLog = []

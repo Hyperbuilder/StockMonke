@@ -1,5 +1,6 @@
 import sys
 import os
+import csv
 
 python = sys.executable
 
@@ -35,82 +36,80 @@ Board64x = [
 # 0 = Empty, 1 = Pawn, 2 = Queen, 3 = King, 4 = Bishop, 5 = Knight, 6 = Rook
 
 # 0 = Blank, 1 = White, 2 = Black
-PiecesList = [
-    [6, 5, 4, 2, 3, 4, 5, 6, 
-    1, 1, 1, 1, 1, 1, 1, 1,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    1, 1, 1, 1, 1, 1, 1, 1, 
-    6, 5, 4, 2, 3, 4, 5, 6], 
-    [
-    2, 2, 2, 2, 2, 2, 2, 2, 
-    2, 2, 2, 2, 2, 2, 2, 2, 
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    1, 1, 1, 1, 1, 1, 1, 1, 
-    1, 1, 1, 1, 1, 1, 1, 1, 
-]
-]
+# PiecesList = [
+#     [6, 5, 4, 2, 3, 4, 5, 6, 
+#     1, 1, 1, 1, 1, 1, 1, 1,
+#     0, 0, 0, 0, 0, 0, 0, 0,
+#     0, 0, 0, 0, 0, 0, 0, 0,
+#     0, 0, 0, 0, 0, 0, 0, 0,
+#     0, 0, 0, 0, 0, 0, 0, 0,
+#     1, 1, 1, 1, 1, 1, 1, 1, 
+#     6, 5, 4, 2, 3, 4, 5, 6], 
+#     [
+#     2, 2, 2, 2, 2, 2, 2, 2, 
+#     2, 2, 2, 2, 2, 2, 2, 2, 
+#     0, 0, 0, 0, 0, 0, 0, 0,
+#     0, 0, 0, 0, 0, 0, 0, 0,
+#     0, 0, 0, 0, 0, 0, 0, 0,
+#     0, 0, 0, 0, 0, 0, 0, 0,
+#     1, 1, 1, 1, 1, 1, 1, 1, 
+#     1, 1, 1, 1, 1, 1, 1, 1, 
+#     ]
+# ]
 
-loop = input("Next Turn? ")
+PiecesList = list(csv.reader(open('StartPos.csv', 'r')))
 
-while loop != False:
+intPiecesList = [int(string) for inner_list in PiecesList for string in inner_list]
+
 #Van vakje naar de array zodat je f1 in kan voeren enzo
-    def SquareNumb(Square):
-        file = ord(Square[0]) - ord('a')
-        rank = 8 - int(Square[1])
-        return rank * 8 + file
+def SquareNumb(Square):
+    file = ord(Square[0]) - ord('a')
+    rank = 8 - int(Square[1])
+    return rank * 8 + file
 
-    #input player
-    InputFrom = input("from: ")
-    InputTo = input("to: ")
+#input player
+InputFrom = input('from: ')
+InputTo = input('to: ')
 
-    #Printen van list nummer voor overzicht
-    print("From: " , SquareNumb(InputFrom))
-    print("To:" , SquareNumb(InputTo))
+#Printen van list nummer voor overzicht
+print('From: ' , SquareNumb(InputFrom))
+print('To:' , SquareNumb(InputTo))
 
-    #move maak klote
-    def MakeMove(InputFromSquare, InputToSquare):
-        From = SquareNumb(InputFromSquare)
-        To = SquareNumb(InputToSquare)
+#move maak klote
+def MakeMove(InputFromSquare, InputToSquare):
+    From = SquareNumb(InputFromSquare)
+    To = SquareNumb(InputToSquare)
 
-        PiecesList[0][To] = PiecesList[0][From]
-        PiecesList[1][To] = PiecesList[1][From]
+    PiecesList[0][To] = PiecesList[0][From]
+    PiecesList[1][To] = PiecesList[1][From]
 
-        PiecesList[0][From] = 0
-        PiecesList[1][From] = 0
+    PiecesList[0][From] = 0
+    PiecesList[1][From] = 0
 
-    MakeMove(InputFrom, InputTo)
+MakeMove(InputFrom, InputTo)
 
-    #printen in console
-    PiecesDict = {
-        #stukken
-        0 : " ",
-        1 : "P",
-        2 : "Q",
-        3 : "K",
-        4 : "B", 
-        5 : "N",
-        6 : "R",
+#printen in consoleS
+PiecesDict = {
+    #stukken
+    0 : ' ',
+    1 : 'P',
+    2 : 'Q',
+    3 : 'K',
+    4 : 'B', 
+    5 : 'N',
+    6 : 'R',
 
-        #kleuren
-        7 : " ",
-        8 : "W",
-        9 : "B"
-    }
+    #kleuren
+    7 : ' ',
+    8 : 'W',
+    9 : 'B'
+}
 
-    for i in range(8):
-        for j in range(8):
-            Piece = PiecesList[0][i * 8 + j]
-            Color = PiecesList[1][i * 8 + j] + 7
-
-            print(PiecesDict[Piece], PiecesDict[Color], sep='', end= " ")
-        print()
-
-
-
-    os.execl(python, python, * sys.argv)
+for i in range(8):
+    for j in range(8):
+        Piece = PiecesList[0][i * 8 + j]
+        Color = intPiecesList[1][i * 8 + j] + 7
+        
+        print(PiecesDict[Piece], PiecesDict[Color], sep='', end= ' ')
+        
+    print()
