@@ -5,12 +5,12 @@ import csv
 python = sys.executable
 
 #Bord om te kijken of het stuk op het speelbord blijft, was sneller volgens gekke website
-Board120xFile = list(csv.reader(open('Board120x.csv', 'r')))
-Board120xList = [list(map(int, i)) for i in Board120xFile]
+Board120xFile = csv.reader(open('Board120x.csv', 'r'))
+Board120x = [list(map(int, i)) for i in Board120xFile]
 
 #Bord met offsets voor move generatie, waarom bij 21 beginnen? idk
 Board64xFile = list(csv.reader(open('Board64x.csv', 'r')))
-Board64xList = [list(map(int, i)) for i in Board64xFile]
+Board64x = [list(map(int, i)) for i in Board64xFile]
 
 #Importen van startpositie
 #Eerste is Pieces, 2de is kleuren
@@ -21,7 +21,7 @@ PiecesList = [list(map(int, i)) for i in PiecesListFile]
 
 while True:
 
-    
+    LegalMoves = []
 
     #input player
     InputFrom = input("from: ")
@@ -33,19 +33,57 @@ while True:
         rank = 8 - int(Square[1])
         return rank * 8 + file
 
-    
+    print(SquareNumb(InputFrom))
 
     #Legal move berekenen
 
     #kijken of move op bord is
     #wiens beurt het is, begint natuurlijk bij wit
-    side = 1
+    side = int(1)
 
     IsSlidingPiece = [False, False, False, True, True, True, False]
     OffsetAmount = [0, 0, 8, 4, 4, 8, 8]
-    OffsetValues = [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [-21, -19,-12, -8, 8, 12, 19, 21], [-11, -9, 9, 11, 0, 0, 0, 0], [-10, -1, 1, 10, 0, 0, 0, 0], [-11, -10, -9, -1, 1, 9, 10, 11], [-11, -10, -9, -1, 1, 9, 10, 11]]
+    OffsetValues = [
+        [0, 0, 0, 0, 0, 0, 0, 0],           #Empty
+        [0, 0, 0, 0, 0, 0, 0, 0],           #Pawwn
+        [-21, -19,-12, -8, 8, 12, 19, 21],  #Pferd
+        [-11, -9, 9, 11, 0, 0, 0, 0],       #Bishop
+        [-10, -1, 1, 10, 0, 0, 0, 0],       #Rook
+        [-11, -10, -9, -1, 1, 9, 10, 11],   #Queen
+        [-11, -10, -9, -1, 1, 9, 10, 11]]   #King
     
-    
+    print(PiecesList[1][59])
+
+    #for i in range(64): komt nog als alle moves gedaan moeten wordne, eerst voor 1 move
+    i = SquareNumb(InputFrom)
+    if PiecesList[1][i] == side:
+        Piece = PiecesList[0][i]
+        if Piece != 1:
+            for j in range(OffsetAmount[Piece]):
+                for n in range(8):
+                    n = i
+                    n = Board120x[0][Board64x[0][n] + OffsetValues[Piece][j]]
+                    if n == -1:
+                        break
+                    if PiecesList[1][n] != 0 and PiecesList[1][n] != side:
+                        
+                        #move generatie moet nog kome, is voor caputre
+                        if n not in LegalMoves:
+                            LegalMoves.append(n)
+                        break
+                    if n not in LegalMoves:
+                        LegalMoves.append(n)
+                    if IsSlidingPiece[Piece] == False:
+                        break
+                    
+        else:
+            None #pawn moves
+            
+
+    print(LegalMoves)
+                        
+
+
     
     
     #move maak klote

@@ -1,5 +1,5 @@
 import pygame as pygame
-import engine
+#import engine
 
 width = 512
 height = 512
@@ -23,7 +23,7 @@ def main():
     screen = pygame.display.set_mode((width,height), #pygame.NOFRAME
     );
     clock = pygame.time.Clock()
-    gState = engine.GameState()
+    #gState = engine.GameState()
     gameRunning = True
     imageLoader()
 
@@ -48,14 +48,14 @@ def main():
                     pass
                     
 
-        drawGState(screen, gState)
+        #drawGState(screen, gState)
         clock.tick(maxFramesPerSecond)
         pygame.display.flip()
 
 
-def drawGState(screen, gState):
-    drawChessBoard(screen)
-    drawChessPieces(screen, gState.board)
+#def drawGState(screen, gState):
+    #drawChessBoard(screen)
+    #drawChessPieces(screen, gState.board)
 
 def drawChessBoard(screen):
     colorThemes = [
