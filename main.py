@@ -45,6 +45,7 @@ def main():
                     selectedSquare = (row, column)
                     mouseClickEvents.append(selectedSquare)
                 if len(mouseClickEvents) == 2:
+                    pass
                     
 
         drawGState(screen, gState)
