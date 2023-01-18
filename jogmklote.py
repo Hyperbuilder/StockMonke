@@ -1,6 +1,8 @@
 import sys
 import os
 import csv
+import math
+import time
 
 python = sys.executable
 
@@ -9,19 +11,24 @@ Board120xFile = csv.reader(open('Board120x.csv', 'r'))
 Board120x = [list(map(int, i)) for i in Board120xFile]
 
 #Bord met offsets voor move generatie, waarom bij 21 beginnen? idk
-Board64xFile = list(csv.reader(open('Board64x.csv', 'r')))
+Board64xFile = csv.reader(open('Board64x.csv', 'r'))
 Board64x = [list(map(int, i)) for i in Board64xFile]
 
 #Importen van startpositie
 #Eerste is Pieces, 2de is kleuren
 # 0 = Empty, 1 = Pawn, 2 = Knight, 3 = Bishop, 4 = Rook, 5 = Queen, 6 = King
 # 0 = Empty, 1 = White, 2 = Black
-PiecesListFile = list(csv.reader(open('StartPos.csv', 'r')))
+PiecesListFile = list(csv.reader(open('Test Bord.csv', 'r')))
 PiecesList = [list(map(int, i)) for i in PiecesListFile]
+
+
 
 while True:
 
-    LegalMoves = []
+    StartTime = time.process_time()
+
+    #eerste is vanaf 2de is naartoe, 3de is capture of niet
+    LegalMoves = [[],[],[]]
 
     #input player
     InputFrom = input("from: ")
@@ -29,9 +36,18 @@ while True:
 
     #Van vakje naar de array zodat je f1 in kan voeren enzo
     def SquareNumb(Square):
-        file = ord(Square[0]) - ord('a')
-        rank = 8 - int(Square[1])
-        return rank * 8 + file
+        File = ord(Square[0]) - ord('a')
+        Rank = 8 - int(Square[1])
+        return Rank * 8 + File
+
+    def InvSquareNumb(Square):
+        FileNum= Square % 8
+        RankNum = 8 - math.floor(Square / 8)
+        
+        File = chr((ord('a') + FileNum))
+        Rank = str(RankNum)
+
+        return File + Rank
 
     print(SquareNumb(InputFrom))
 
@@ -39,7 +55,8 @@ while True:
 
     #kijken of move op bord is
     #wiens beurt het is, begint natuurlijk bij wit
-    side = int(1)
+    Side = 1
+    NotSide = 2
 
     IsSlidingPiece = [False, False, False, True, True, True, False]
     OffsetAmount = [0, 0, 8, 4, 4, 8, 8]
@@ -51,41 +68,56 @@ while True:
         [-10, -1, 1, 10, 0, 0, 0, 0],       #Rook
         [-11, -10, -9, -1, 1, 9, 10, 11],   #Queen
         [-11, -10, -9, -1, 1, 9, 10, 11]]   #King
-    
-    print(PiecesList[1][59])
 
-    #for i in range(64): komt nog als alle moves gedaan moeten wordne, eerst voor 1 move
-    i = SquareNumb(InputFrom)
-    if PiecesList[1][i] == side:
-        Piece = PiecesList[0][i]
-        if Piece != 1:
-            for j in range(OffsetAmount[Piece]):
-                for n in range(8):
+    for i in range(64):
+        if PiecesList[1][i] == Side:
+            Piece = PiecesList[0][i]
+            if Piece != 1:
+                for j in range(OffsetAmount[Piece]):
                     n = i
-                    n = Board120x[0][Board64x[0][n] + OffsetValues[Piece][j]]
-                    if n == -1:
-                        break
-                    if PiecesList[1][n] != 0 and PiecesList[1][n] != side:
+                    for m in range(1, 10):
                         
-                        #move generatie moet nog kome, is voor caputre
-                        if n not in LegalMoves:
-                            LegalMoves.append(n)
-                        break
-                    if n not in LegalMoves:
-                        LegalMoves.append(n)
-                    if IsSlidingPiece[Piece] == False:
-                        break
-                    
-        else:
-            None #pawn moves
+                        IndexNumber = Board64x[0][n] + OffsetValues[Piece][j] * m
+
+                        if IndexNumber <= 120:
+                            n = Board120x[0][IndexNumber]
+                        else:
+                            n = -1
+
+                        print(IndexNumber, "m:",m, "n:",n)
+
+                        if n == -1: break
+
+                        if PiecesList[1][n] != 0:
+                            if PiecesList[1][n] == NotSide:
+                                if n not in LegalMoves:
+                                    LegalMoves[0].append(i)
+                                    LegalMoves[1].append(n)
+                                    LegalMoves[2].append(True)
+                                breakpoint
+                                
+                        elif PiecesList[1][n] == 0:
+                            if n not in LegalMoves:
+                                LegalMoves[0].append(i)
+                                LegalMoves[1].append(n)
+                                LegalMoves[2].append(False)
+                            breakpoint
+                            
+                        
+                        if IsSlidingPiece[Piece] == False: break                  
+            else:
+                None #pawn moves
+        print(len(LegalMoves[0]))
             
-
-    print(LegalMoves)
-                        
-
-
     
+    for j in range(len(LegalMoves[0])):
+        ConvertLegalMoves = [[], [], []]
+        ConvertLegalMoves[0] = InvSquareNumb(int(LegalMoves[0][j]))
+        ConvertLegalMoves[1] = InvSquareNumb(int(LegalMoves[1][j]))
+        ConvertLegalMoves[2] = LegalMoves[2][j]
+        print(ConvertLegalMoves)
     
+
     #move maak klote
     def MakeMove(InputFromSquare, InputToSquare):
         From = SquareNumb(InputFromSquare)
@@ -124,3 +156,8 @@ while True:
             print(PiecesDict[Piece], PiecesDict[Color], sep='', end= ' ')
             
         print()
+
+    EndTime = time.process_time()
+    print("Process time: ", EndTime - StartTime)
+
+    
