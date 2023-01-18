@@ -106,7 +106,6 @@ while True:
         #Pseudo legal move generenen
         LegalMoves = CalcLegalMoves.PieceSpecificMoves(InputFrom, CalcLegalMoves.CalcPseudoLegalMoves(PiecesList, Side, NotSide))
         
-        print(LegalMoves)
 
         #for j in range(len(LegalMoves[0])):
          #   ConvertLegalMoves = [[],[],[]]

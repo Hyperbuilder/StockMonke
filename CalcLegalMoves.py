@@ -120,17 +120,7 @@ def CalcPseudoLegalMoves(BoardConfig, Side, NotSide):
 
 
 def PieceSpecificMoves(SelectedPiece, LegalMoves):
-    PieceSpecificMove = [[],[],[]]
-    LegalMoves = list(LegalMoves)
-    i = SelectedPiece
-    print(i)
-    print(len(LegalMoves[0]))
-
-    while i in LegalMoves[0]: 
-        for j in range(3):
-            LegalMoves[j].append(LegalMoves[j])
-            break
-    
+   
     
     return PieceSpecificMove
 
