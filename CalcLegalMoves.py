@@ -1,4 +1,5 @@
 import csv
+import math
 
 #120x board importen
 Board120xFile = csv.reader(open('Board120x.csv', 'r'))
@@ -120,11 +121,17 @@ def CalcPseudoLegalMoves(BoardConfig, Side, NotSide):
 
 
 def PieceSpecificMoves(SelectedPiece, LegalMoves):
-   
-    
-    return PieceSpecificMove
+    PieceSpecificLegalMoves = [[], [], []]
+    for selectedPieceIndexPos, selectedPiece in enumerate(LegalMoves[0]):
+        if (selectedPiece == SelectedPiece):
+            PieceSpecificLegalMoves[0].append(LegalMoves[0][selectedPieceIndexPos])
+            PieceSpecificLegalMoves[1].append(LegalMoves[1][selectedPieceIndexPos])
+            PieceSpecificLegalMoves[2].append(LegalMoves[2][selectedPieceIndexPos])
+    return PieceSpecificLegalMoves
 
 
+def isPlayerInCheck():
+    pass
 
 
 

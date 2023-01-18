@@ -55,7 +55,7 @@ PiecesDict = {
         1 : 'P',
         2 : 'N',
         3 : 'B',
-        4 : 'R', 
+        4 : 'R',
         5 : 'Q',
         6 : 'K',
 
@@ -75,7 +75,7 @@ while True:
     PrintGrid = ["."] * 64
 
     SelectPiece = False
-    while SelectPiece == False:     
+    while SelectPiece == False:
 
         LegalMoves = [[],[],[]]
 
@@ -91,28 +91,29 @@ while True:
             for j in range(8):
                 Piece = PiecesList[0][i * 8 + j]
                 Color = PiecesList[1][i * 8 + j] + 7
-                
+
                 print(PiecesDict[Piece], PiecesDict[Color], sep='', end= ' ')
-                
+
             print()
 
         print()
-    
+
         InputFrom = SquareNumb(input("From: "))
 
         print()
 
 
-        #Pseudo legal move generenen
+        #Legal moves voor geselecteerde schaakstuk
         LegalMoves = CalcLegalMoves.PieceSpecificMoves(InputFrom, CalcLegalMoves.CalcPseudoLegalMoves(PiecesList, Side, NotSide))
-        
+        #Alle LegalMoves
+        #LegalMoves = CalcLegalMoves.CalcPseudoLegalMoves(PiecesList, Side, NotSide)
 
-        #for j in range(len(LegalMoves[0])):
-         #   ConvertLegalMoves = [[],[],[]]
-         #   ConvertLegalMoves[0] = InvSquareNumb(int(LegalMoves[0][j]))
-          #  ConvertLegalMoves[1] = InvSquareNumb(int(LegalMoves[1][j]))
-          #  ConvertLegalMoves[2] = LegalMoves[2][j]
-           # print(ConvertLegalMoves)
+        # for j in range(len(LegalMoves[0])):
+        #    ConvertLegalMoves = [[],[],[]]
+        #    ConvertLegalMoves[0] = InvSquareNumb(int(LegalMoves[0][j]))
+        #    ConvertLegalMoves[1] = InvSquareNumb(int(LegalMoves[1][j]))
+        #    ConvertLegalMoves[2] = LegalMoves[2][j]
+        #    print(ConvertLegalMoves)
 
 
         #printen legalmoves & capture
@@ -122,18 +123,19 @@ while True:
                 PrintGrid[LegalMovesPrint[i]] = 'x'
             else:
                 PrintGrid[LegalMovesPrint[i]] = 'o'
-        
+
         print()
-            
+
         for i in range(0, 64, 8):
             print(' '.join(PrintGrid[i:i+8]))
-                
+
         PrintGrid = ["."] * 64
-        
+
         print()
 
         SelectPiece = True
-        
+        #End of While Loop
+
     ChooseMove = False
     while ChooseMove == False:
         print()
@@ -146,18 +148,19 @@ while True:
             MakeMove(InputFrom, InputTo)
             ChooseMove = True
         else:
-            ChooseMove = False 
+            ChooseMove = False
             print('\n', "u stupid thats big nono", '\n')
 
+        #End of While Loop
+
     StoreSide = Side
-    Side = NotSide 
-    NotSide = StoreSide    
+    Side = NotSide
+    NotSide = StoreSide
 
     EndTime = time.process_time()
     print("Process time: ", EndTime - StartTime)
     print()
     clear()
-    
 
-    
- 
+
+
