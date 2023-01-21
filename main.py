@@ -3,7 +3,17 @@ import sys
 import os
 import csv
 import math
-#import jogmklote as engine
+import jogmklote
+
+Board120xFile = list(csv.reader(open('Board120x.csv', 'r')))
+Board120x = [list(map(int, i)) for i in Board120xFile]
+
+Board64xFile = list(csv.reader(open('Board64x.csv', 'r')))
+Board64x = [list(map(int, i)) for i in Board64xFile]
+
+BoardConfigFile = list(csv.reader(open('StartPos.csv', 'r')))
+BoardConfig = [list(map(int, i)) for i in BoardConfigFile]
+
 
 #Standaard waarden voor venster en schaakbord
 width = 1024
@@ -14,7 +24,7 @@ squareWidth = width / xDimension
 squareHeight = height / yDimension
 maxFramesPerSecond = 30
 
-PiecesDict = {
+PieceDict = {
     #stukken
     0 : ' ',
     1 : 'P',
@@ -65,7 +75,7 @@ def main():
 
     while gameRunning:
 
-        PiecesListFile = list(csv.reader(open('Test bord.csv', 'r')))
+        PiecesListFile = list(csv.reader(open('StartPos.csv', 'r')))
         PiecesList = [list(map(int, i)) for i in PiecesListFile]
 
         for event in pygame.event.get():
@@ -86,10 +96,11 @@ def main():
                 elif len(playerSelectedSquares) == 1:
                     SelectedSquareLocation = ''
                     playerSelectedSquares.append(mouseBoardLocation)
-                    #engine.MakeMove(playerSelectedSquares[0], playerSelectedSquares[1])
                     print("moved " + pieceOnSelectedSquare + playerSelectedSquares[0] + " to " + playerSelectedSquares[1])
+                    jogmklote.PlayGame(playerSelectedSquares[0], playerSelectedSquares[1])
                     playerSelectedSquares = []
                     pieceOnSelectedSquare = ''
+
 
 
         drawScreen(screen, font, selectedBoardTheme, PiecesList)
@@ -120,7 +131,7 @@ def drawChessPieces(screen, PiecesList):
             Piece = PiecesList[0][row * 8 + column]
             Color = PiecesList[1][row * 8 + column] + 7
             #Letters mergen waardoor images[] het kan gebruiken
-            piece = str(PiecesDict[Piece]) + str(PiecesDict[Color])
+            piece = str(PieceDict[Piece]) + str(PieceDict[Color])
             if piece != '  ':
                 screen.blit(images[piece], pygame.Rect(column*squareWidth, row*squareHeight, squareWidth, squareHeight))
 
@@ -140,7 +151,7 @@ def getChessPieceOnLocation(PiecesList):
     mouseBoardCoordinate = getBoardLocationCoords()
     x64BoardindexNumber = SquareIndexNumber(mouseBoardCoordinate)
     PieceIndexNumber = PiecesList[0][x64BoardindexNumber]
-    return PiecesDict[PieceIndexNumber]
+    return PieceDict[PieceIndexNumber]
 
 
 
@@ -149,3 +160,5 @@ def getChessPieceOnLocation(PiecesList):
 
 if __name__ == "__main__":
     main()
+    
+

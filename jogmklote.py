@@ -4,9 +4,9 @@ import csv
 import math
 import time
 import CalcLegalMoves
+import Functions
 
 python = sys.executable
-clear = lambda: os.system('cls')
 
 #Bord om te kijken of het stuk op het speelbord blijft, was sneller volgens gekke website
 Board120xFile = csv.reader(open('Board120x.csv', 'r'))
@@ -20,36 +20,10 @@ Board64x = [list(map(int, i)) for i in Board64xFile]
 #Eerste is Pieces, 2de is kleuren
 # 0 = Empty, 1 = Pawn, 2 = Knight, 3 = Bishop, 4 = Rook, 5 = Queen, 6 = King
 # 0 = Empty, 1 = White, 2 = Black
-PiecesListFile = list(csv.reader(open('StartPos.csv', 'r')))
-PiecesList = [list(map(int, i)) for i in PiecesListFile]
+BoardConfigFile = list(csv.reader(open('StartPos.csv', 'r')))
+BoardConfig = [list(map(int, i)) for i in BoardConfigFile]
 
-#Van bordcoordinaat naar x64index int
-def SquareNumb(Square):
-    File = ord(Square[0]) - ord('a')
-    Rank = 8 - int(Square[1])
-    return Rank * 8 + File
-
-#Van x64index int naar bordcoordinaat
-def InvSquareNumb(Square):
-    FileNum= Square % 8
-    RankNum = 8 - math.floor(Square / 8)
-    File = chr((ord('a') + FileNum))
-    Rank = str(RankNum)
-    return File + Rank
-
-
-def MakeMove(InputFromSquare, InputToSquare):
-    From = InputFromSquare
-    To = InputToSquare
-
-    PiecesList[0][To] = PiecesList[0][From]
-    PiecesList[1][To] = PiecesList[1][From]
-
-    PiecesList[0][From] = 0
-    PiecesList[1][From] = 0
-
-
-PiecesDict = {
+PieceDict = {
         #stukken
         0 : '.',
         1 : 'P',
@@ -65,102 +39,76 @@ PiecesDict = {
         9 : 'B'
     }
 
-#Wiens beurt
-Side = 1
-NotSide = 2
+def PlayGame(InputFrom, InputTo):
+#kant die aan de beurt is toevoegen
+    #FEN = input("Insert FEN: ")
 
-while True:
-    StartTime = time.process_time()
+    #if FEN == "def":
+    #    FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 
-    PrintGrid = ["."] * 64
+    #BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
 
-    SelectPiece = False
-    while SelectPiece == False:
+
+
+
+    #Wiens beurt
+    whiteToMove = True #Functions.ConvertFENString(FEN)[1]
+    whiteKingSquare = 60
+    blackKingSquare = 5
+    CapturedPieces = []
+
+    while True:
+        StartTime = time.process_time()
+
+
+        #Selec
+    #while SelectPiece == False:
 
         LegalMoves = [[],[],[]]
 
-        if Side == 1:
+        if whiteToMove:
             print("White")
         else:
             print("Black")
 
-        print()
-
         #printen van bord
-        for i in range(8):
-            for j in range(8):
-                Piece = PiecesList[0][i * 8 + j]
-                Color = PiecesList[1][i * 8 + j] + 7
-
-                print(PiecesDict[Piece], PiecesDict[Color], sep='', end= ' ')
-
-            print()
-
-        print()
-
-        InputFrom = SquareNumb(input("From: "))
-
-        print()
-
+        Functions.PrintChessBoard(BoardConfig, PieceDict)
+        
 
         #Legal moves voor geselecteerde schaakstuk
-        LegalMoves = CalcLegalMoves.PieceSpecificMoves(InputFrom, CalcLegalMoves.CalcPseudoLegalMoves(PiecesList, Side, NotSide))
-        #Alle LegalMoves
-        #LegalMoves = CalcLegalMoves.CalcPseudoLegalMoves(PiecesList, Side, NotSide)
+        LegalMoves = CalcLegalMoves.PieceSpecificMoves(InputFrom, CalcLegalMoves.CalcPseudoLegalMoves(BoardConfig, whiteToMove))
+    
 
-        # for j in range(len(LegalMoves[0])):
-        #    ConvertLegalMoves = [[],[],[]]
-        #    ConvertLegalMoves[0] = InvSquareNumb(int(LegalMoves[0][j]))
-        #    ConvertLegalMoves[1] = InvSquareNumb(int(LegalMoves[1][j]))
-        #    ConvertLegalMoves[2] = LegalMoves[2][j]
-        #    print(ConvertLegalMoves)
-
+        Functions.PrintLegalMoveList(LegalMoves)
 
         #printen legalmoves & capture
-        for i in range(len(LegalMoves[1])):
-            LegalMovesPrint = LegalMoves[1]
-            if LegalMoves[2][i] == False:
-                PrintGrid[LegalMovesPrint[i]] = 'x'
-            else:
-                PrintGrid[LegalMovesPrint[i]] = 'o'
-
+        Functions.PrintChessBoardCaptures(LegalMoves)
+        
         print()
+        
+        time.sleep(5)
 
-        for i in range(0, 64, 8):
-            print(' '.join(PrintGrid[i:i+8]))
-
-        PrintGrid = ["."] * 64
-
-        print()
-
-        SelectPiece = True
+        #Stop Whileloop
+        #SelectPiece = True
         #End of While Loop
 
-    ChooseMove = False
-    while ChooseMove == False:
-        print()
 
-        InputTo = SquareNumb(input("to: "))
+        #ChooseMove = False
+        #while ChooseMove == False:
 
-        print()
-
-        if InputTo in LegalMoves[1]:
-            MakeMove(InputFrom, InputTo)
-            ChooseMove = True
-        else:
-            ChooseMove = False
-            print('\n', "u stupid thats big nono", '\n')
-
+        ChooseMove = Functions.MakeMove(InputFrom, InputTo, BoardConfig, LegalMoves)
+        if ChooseMove[1] != ():
+            CapturedPieces.append(ChooseMove[1])
+        print(CapturedPieces)
+    
+        if not ChooseMove[0]:
+            print("EY DUMDUM kan toch niet he moettie briltje ha?")
         #End of While Loop
 
-    StoreSide = Side
-    Side = NotSide
-    NotSide = StoreSide
+        whiteToMove = not whiteToMove
 
-    EndTime = time.process_time()
-    print("Process time: ", EndTime - StartTime)
-    print()
-    clear()
-
+        EndTime = time.process_time()
+        print("Process time: ", EndTime - StartTime)
+        #End of While Loop
 
 
