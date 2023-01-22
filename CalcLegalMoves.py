@@ -141,11 +141,7 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
     InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove)
     Functions.PrintLegalMoveList(InitPseudoLegalMoves)
 
-    boardconfig = None
-
-    for i in range(len(InputInitBoardConfig)):
-        for j in range(len(InputInitBoardConfig[i])):
-        
+    InitBoardConfig = InputInitBoardConfig
         
     for PossibleMove in range(len(InitPseudoLegalMoves[0])):
 
