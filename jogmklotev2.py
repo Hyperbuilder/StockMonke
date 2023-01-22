@@ -10,4 +10,4 @@ print(SquareFrom)
 
 WhiteToMove = True
 
-CalcLegalMoves.legalKingMoves(BoardConfig, SquareFrom, WhiteToMove)
+CalcLegalMoves.legalKingMoves(BoardConfig, BoardConfig, SquareFrom, WhiteToMove)
