@@ -1,6 +1,22 @@
 import math
 import pygame
 
+PieceDict = {
+        #stukken
+        0 : '.',
+        1 : 'P',
+        2 : 'N',
+        3 : 'B',
+        4 : 'R',
+        5 : 'Q',
+        6 : 'K',
+
+        #kleuren
+        7 : '.',
+        8 : 'W',
+        9 : 'B'
+    }
+
 def ConvertFENString(FEN):
     
     Board = [[],[]]
@@ -54,18 +70,28 @@ def SquareNumb(Square):
 
 
 def InvSquareNumb(Square):
-    FileNum= Square % 8
-    RankNum = 8 - math.floor(Square / 8)
+    FileNum = Square % 8
+    RankNum = 8 - Square // 8
     File = chr((ord('a') + FileNum))
     Rank = str(RankNum)
     return File + Rank
 
-       
+def MakeMove(InputFromSquare, InputToSquare, InitBoardConfig, LegalMoves):
+    BoardConfig = InitBoardConfig
+    if InputToSquare in LegalMoves[1]:
+        BoardConfig[0][InputToSquare] = BoardConfig[0][InputFromSquare]
+        BoardConfig[1][InputToSquare] = BoardConfig[1][InputFromSquare]
+
+        BoardConfig[0][InputFromSquare] = 0
+        BoardConfig[1][InputFromSquare] = 0
+    
+    return list(BoardConfig)
+  
 
 
 
 #functies voor debuggen zoals printen'
-def PrintChessBoard(BoardConfig, PieceDict):
+def PrintChessBoard(BoardConfig):
     for i in range(8):
         for j in range(8):
             Piece = BoardConfig[0][i * 8 + j]
@@ -97,6 +123,8 @@ def PrintLegalMoveList(LegalMoves):
         ConvertLegalMoves[1] = InvSquareNumb(int(LegalMoves[1][j]))
         ConvertLegalMoves[2] = LegalMoves[2][j]
         print(ConvertLegalMoves)
+    print("Amount of Legal Moves: ", len(LegalMoves[0]))
+    
 
 def WhiteToMoveTONumber(whiteToMove):
     if whiteToMove:
@@ -125,3 +153,8 @@ def getBoardLocationCoords(xBoardCoordinates, yBoardCoordinates, width, height):
     mouseYAxisLocation = mouseLocationCoords[1]
     mouseBoardLocation = str(xBoardCoordinates[mouseXAxisLocation // (width//8)]) + str(yBoardCoordinates[7 - mouseYAxisLocation // (height//8)])
     return mouseBoardLocation
+
+def brdnumtorowcol(number):
+    column = number // 8
+    row = number - column*8
+    return row, column

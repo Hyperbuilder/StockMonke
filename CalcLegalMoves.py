@@ -3,6 +3,7 @@ import math
 import Functions
 import engine
 
+
 #120x board importen
 Board120xFile = csv.reader(open('Board120x.csv', 'r'))
 Board120x = [list(map(int, i)) for i in Board120xFile]
@@ -27,22 +28,6 @@ OffsetValues = [
 CheckPawnOnFirstRowW = [81, 82, 83, 84, 85, 86, 87, 88]
 CheckPawnOnFirstRowB = [31, 32, 33, 34, 35, 36, 37, 38]
 
-
-PieceDict = {
-        #stukken
-        0 : '.',
-        1 : 'P',
-        2 : 'N',
-        3 : 'B',
-        4 : 'R',
-        5 : 'Q',
-        6 : 'K',
-
-        #kleuren
-        7 : '.',
-        8 : 'W',
-        9 : 'B'
-    }
 
 #Calc pseudo legal moves (alle moves zonder dat er met schaak, en passant of rokeren te maken heeft), moves voor specific pieces komt in andere functie
 def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
@@ -149,40 +134,35 @@ def PieceSpecificMoves(SelectedPiece, LegalMoves):
     return PieceSpecificLegalMoves
 
 
-def legalKingMoves(InitialBoardConfig, BoardConfig, SquareFrom, WhiteToMove):
+def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
     InitMoveCount = 0
     ResponseMoveCount = 0
 
-    InitPiecePseudoLegalMoves = PieceSpecificMoves(SquareFrom, CalcPseudoLegalMoves(BoardConfig, WhiteToMove))
-    print(InitPiecePseudoLegalMoves)
+    InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove)
+    Functions.PrintLegalMoveList(InitPseudoLegalMoves)
 
-    Functions.PrintChessBoard(InitialBoardConfig, PieceDict)
+    boardconfig = None
 
+    for i in range(len(InputInitBoardConfig)):
+        for j in range(len(InputInitBoardConfig[i])):
+        
+        
+    for PossibleMove in range(len(InitPseudoLegalMoves[0])):
 
-    BoardConfigList = []
-
-    for PossibleMove in range(len(InitPiecePseudoLegalMoves[1])):
-
-        #Functions.PrintChessBoard(BoardConfig, PieceDict)
-        print(InitPiecePseudoLegalMoves[1][PossibleMove])
-
-        engine.SelectMoveTo(InitPiecePseudoLegalMoves[0][PossibleMove], InitPiecePseudoLegalMoves[1][PossibleMove], BoardConfig, InitPiecePseudoLegalMoves)
-
-        #Functions.PrintChessBoard(BoardConfig, PieceDict)
+        Functions.PrintChessBoard(InitBoardConfig)
+        print()
+        print()
+        FirstItBoardConfig = Functions.MakeMove(InitPseudoLegalMoves[0][PossibleMove], InitPseudoLegalMoves[1][PossibleMove], InitBoardConfig, InitPseudoLegalMoves)
+        #Functions.PrintChessBoard(FirstItBoardConfig)
         InitMoveCount += 1
 
-        BoardConfigList.append(BoardConfig)
 
         
-            
-    Functions.PrintChessBoard(InitialBoardConfig, PieceDict)
+  
     
-    #for i in range(len(InitialBoardConfigList)):
-        #Functions.PrintChessBoard(InitialBoardConfigList[i], PieceDict)
-
-
-    print(InitMoveCount)
-    print(ResponseMoveCount)
+    #print(BoardConfigList)
+    print("InitMoveCount", InitMoveCount)
+    print("ResponseMoveCount", ResponseMoveCount)
     
     
 

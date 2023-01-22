@@ -25,7 +25,7 @@ xDimension = 8
 yDimension = 8
 squareWidth = width / xDimension
 squareHeight = height / yDimension
-maxFramesPerSecond = 30
+maxFramesPerSecond = 60
 
 PieceDict = {
     #stukken
@@ -69,6 +69,8 @@ def main():
     CapturedPieces = []
 
     while gameRunning:
+        Side, NotSide = Functions.WhiteToMoveTONumber(WhiteToMove)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameRunning = False
@@ -77,7 +79,10 @@ def main():
                 mouseBoardLocation = Functions.SquareNumb(Functions.getBoardLocationCoords(xBoardCoordinates, yBoardCoordinates, width, height))
 
                 if HasSelectedPiece == [False, None, None]:
-                    HasSelectedPiece = engine.SelectPiece(mouseBoardLocation, BoardConfig, WhiteToMove)
+                    if BoardConfig[0][mouseBoardLocation] != 0:
+                        if BoardConfig[1][mouseBoardLocation] == Side:
+                            HasSelectedPiece = engine.SelectPiece(mouseBoardLocation, BoardConfig, WhiteToMove)
+                            print(HasSelectedPiece)
                 elif mouseBoardLocation == HasSelectedPiece[2]:
                     HasSelectedPiece = [False, None, None]
                 elif HasSelectedPiece[0] == True:
@@ -90,7 +95,7 @@ def main():
                         print("not a possible move")
 
 
-        drawScreen(screen, font, selectedBoardTheme, BoardConfig, images)
+        drawScreen(screen, font, selectedBoardTheme, BoardConfig, images, HasSelectedPiece)
 
         clock.tick(maxFramesPerSecond)
         pygame.display.flip()
@@ -98,9 +103,11 @@ def main():
 
 
 
-def drawScreen(screen, font, selectedBoardTheme, BoardConfig, images):
+def drawScreen(screen, font, selectedBoardTheme, BoardConfig, images, HasSelectedPiece):
     drawChessBoard(screen, font, selectedBoardTheme)
     drawChessPieces(screen, BoardConfig, images)
+    if HasSelectedPiece[0] == True:
+        drawHighlight(screen, HasSelectedPiece)
 
 
 def drawChessBoard(screen, font, BoardTheme):
@@ -126,6 +133,11 @@ def drawChessPieces(screen, BoardConfig, images):
             piece = str(PieceDict[Piece]) + str(PieceDict[Color])
             if piece != '  ':
                 screen.blit(images[piece], pygame.Rect(column*squareWidth, row*squareHeight, squareWidth, squareHeight))
+
+def drawHighlight(screen, HasSelectedPiece):
+    for i in range(len(HasSelectedPiece[1][1])):
+        row, column = Functions.brdnumtorowcol(HasSelectedPiece[1][1][i])
+        pygame.draw.circle(screen, (109, 113, 46, 50), (row*squareHeight + squareHeight / 2, column*squareWidth + squareWidth / 2), squareWidth // 8)
 
 if __name__ == "__main__":
     main()
