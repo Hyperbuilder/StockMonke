@@ -1,5 +1,5 @@
 import math
-import sys
+import pygame
 
 def ConvertFENString(FEN):
     
@@ -60,23 +60,6 @@ def InvSquareNumb(Square):
     Rank = str(RankNum)
     return File + Rank
 
-
-def MakeMove(InputFromSquare, InputToSquare, BoardConfig, LegalMoves):
-    Capture = ()
-    if InputToSquare in LegalMoves[1]:
-        PieceIndex = LegalMoves[1].index(InputToSquare)
-        BoardConfig[0][InputToSquare] = BoardConfig[0][InputFromSquare]
-        BoardConfig[1][InputToSquare] = BoardConfig[1][InputFromSquare]
-
-        BoardConfig[0][InputFromSquare] = 0
-        BoardConfig[1][InputFromSquare] = 0
-
-        if LegalMoves[2][PieceIndex] == True:
-            Capture = ((BoardConfig[0][InputToSquare], BoardConfig[1][InputToSquare]))
-        
-        return True, Capture
-    else:
-        return False
        
 
 
@@ -92,7 +75,7 @@ def PrintChessBoard(BoardConfig, PieceDict):
 
         print()
 
-def PrintChessBoardCaptures(LegalMoves):
+def PrintChessBoardLegalMovesForPiece(LegalMoves):
     PrintGrid = ["."] * 64
     for i in range(len(LegalMoves[1])):
             LegalMovesPrint = LegalMoves[1]
@@ -123,3 +106,22 @@ def WhiteToMoveTONumber(whiteToMove):
         Side = 2
         NotSide = 1
     return Side, NotSide
+
+def imageLoader(squareWidth, squareHeight):
+    images = {}
+    pieces = ['PW', 'RW', 'NW', 'BW', 'QW', 'KW', 'PB', 'RB', 'NB', 'BB', 'QB', 'KB']
+    for piece in pieces:
+        images[piece] = pygame.transform.scale(pygame.image.load("images/" + piece + ".png"), (squareWidth, squareHeight))
+    return images
+
+def getChessPieceOnLocation(BoardConfig, PieceDict, mouseBoardCoordinate):
+    x64BoardindexNumber = SquareNumb(mouseBoardCoordinate)
+    PieceIndexNumber = BoardConfig[0][x64BoardindexNumber]
+    return PieceDict[PieceIndexNumber]
+
+def getBoardLocationCoords(xBoardCoordinates, yBoardCoordinates, width, height):
+    mouseLocationCoords = pygame.mouse.get_pos()
+    mouseXAxisLocation = mouseLocationCoords[0]
+    mouseYAxisLocation = mouseLocationCoords[1]
+    mouseBoardLocation = str(xBoardCoordinates[mouseXAxisLocation // (width//8)]) + str(yBoardCoordinates[7 - mouseYAxisLocation // (height//8)])
+    return mouseBoardLocation

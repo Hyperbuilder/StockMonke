@@ -1,6 +1,7 @@
 import csv
 import math
 import Functions
+import engine
 
 #120x board importen
 Board120xFile = csv.reader(open('Board120x.csv', 'r'))
@@ -26,14 +27,29 @@ OffsetValues = [
 CheckPawnOnFirstRowW = [81, 82, 83, 84, 85, 86, 87, 88]
 CheckPawnOnFirstRowB = [31, 32, 33, 34, 35, 36, 37, 38]
 
+
+PieceDict = {
+        #stukken
+        0 : '.',
+        1 : 'P',
+        2 : 'N',
+        3 : 'B',
+        4 : 'R',
+        5 : 'Q',
+        6 : 'K',
+
+        #kleuren
+        7 : '.',
+        8 : 'W',
+        9 : 'B'
+    }
+
 #Calc pseudo legal moves (alle moves zonder dat er met schaak, en passant of rokeren te maken heeft), moves voor specific pieces komt in andere functie
-def CalcPseudoLegalMoves(BoardConfig, whiteToMove):
+def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
 
     LegalMoves = [[],[],[]]
 
-    Side, NotSide = Functions.WhiteToMoveTONumber(whiteToMove)
-
-
+    Side, NotSide = Functions.WhiteToMoveTONumber(WhiteToMove)
     for PieceIndex in range(64):
         if BoardConfig[1][PieceIndex] == Side:
                     Piece = BoardConfig[0][PieceIndex]
@@ -133,11 +149,23 @@ def PieceSpecificMoves(SelectedPiece, LegalMoves):
     return PieceSpecificLegalMoves
 
 
-# def legalKingMoves(BoardConfig, whiteToMove):
-#     return
-#     for i in range(64):
-#         if i in CalcPseudoLegalMoves(BoardConfig, whiteToMove):
+def legalKingMoves(InitialBoardConfig, SquareFrom, WhiteToMove):
+    InitMoveCount = 0
+    ResponseMoveCount = 0
+    InitPiecePseudoLegalMoves = PieceSpecificMoves(SquareFrom, CalcPseudoLegalMoves(InitialBoardConfig, WhiteToMove))
+    print(InitPiecePseudoLegalMoves)
+    for PossibleMove in range(len(InitPiecePseudoLegalMoves[1])):
+        BoardConfig = [[],[]]
+        engine.SelectMoveTo(InitPiecePseudoLegalMoves[0][PossibleMove], InitPiecePseudoLegalMoves[1][PossibleMove], InitialBoardConfig, InitPiecePseudoLegalMoves)
+        InitMoveCount += 1
 
+        Functions.PrintChessBoard(BoardConfig, PieceDict)
+            
+        
+
+    
+    print(InitMoveCount)
+    print(ResponseMoveCount)
     
     
 
