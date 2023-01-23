@@ -42,7 +42,7 @@ PieceDict = {
 def SelectPiece(SquareFrom, BoardConfig, WhiteToMove):
     LegalMovesForPiece = CalcLegalMoves.PieceSpecificMoves(SquareFrom, CalcLegalMoves.CalcPseudoLegalMoves(BoardConfig, WhiteToMove))
     print(LegalMovesForPiece)
-    Functions.PrintChessBoard(BoardConfig, PieceDict)
+    Functions.PrintChessBoard(BoardConfig)
     Functions.PrintChessBoardLegalMovesForPiece(LegalMovesForPiece)
     Functions.PrintLegalMoveList(LegalMovesForPiece)
 

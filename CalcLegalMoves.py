@@ -2,7 +2,7 @@ import csv
 import math
 import Functions
 import engine
-
+import time
 
 #120x board importen
 Board120xFile = csv.reader(open('Board120x.csv', 'r'))
@@ -135,28 +135,59 @@ def PieceSpecificMoves(SelectedPiece, LegalMoves):
 
 
 def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
+    start = time.perf_counter()
     InitMoveCount = 0
     ResponseMoveCount = 0
 
+    LegalMoves = [[],[],[]]
+
     InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove)
+
+    IllegalMoves = []
+    
+
+    # Functions.PrintChessBoard(InputInitBoardConfig)
+    # Functions.PrintLegalMoveList(InitPseudoLegalMoves)
+
+      
+    for PossibleMove in range(len(InitPseudoLegalMoves[0])):
+        InitBoardConfig  = [x[:] for x in InputInitBoardConfig]
+        FirstItBoardConfig = Functions.MakeMove(InitPseudoLegalMoves[0][PossibleMove], InitPseudoLegalMoves[1][PossibleMove], InitBoardConfig, InitPseudoLegalMoves)[:]
+
+        SecondItPseudoLegalMoves = CalcPseudoLegalMoves(FirstItBoardConfig, not WhiteToMove)
+        Functions.PrintChessBoardLegalMovesForPiece(SecondItPseudoLegalMoves)
+
+        for Index in range(len(SecondItPseudoLegalMoves[1])):
+            if SecondItPseudoLegalMoves[2][Index] == True:
+                if FirstItBoardConfig[0][SecondItPseudoLegalMoves[1][Index]] == 6:
+                    print(SecondItPseudoLegalMoves[1][Index])
+                    IllegalMoves.append(SecondItPseudoLegalMoves[1][Index])
+
+
+
+        
+        FirstItBoardConfig.clear()
+        InitMoveCount += 1
+
+    Functions.PrintLegalMoveList(InitPseudoLegalMoves)
+    for Move in IllegalMoves:
+        if Move in InitPseudoLegalMoves[1]:
+            Index = InitPseudoLegalMoves[1].index(Move)
+            if InputInitBoardConfig[0][InitPseudoLegalMoves[0][Index]] == 6:
+                InitPseudoLegalMoves[0].pop(Index)
+                InitPseudoLegalMoves[1].pop(Index)
+                InitPseudoLegalMoves[2].pop(Index)
     Functions.PrintLegalMoveList(InitPseudoLegalMoves)
 
-    InitBoardConfig = InputInitBoardConfig
-        
-    for PossibleMove in range(len(InitPseudoLegalMoves[0])):
-
-        Functions.PrintChessBoard(InitBoardConfig)
-        print()
-        print()
-        FirstItBoardConfig = Functions.MakeMove(InitPseudoLegalMoves[0][PossibleMove], InitPseudoLegalMoves[1][PossibleMove], InitBoardConfig, InitPseudoLegalMoves)
-        #Functions.PrintChessBoard(FirstItBoardConfig)
-        InitMoveCount += 1
 
 
         
   
     
-    #print(BoardConfigList)
+
+    end = time.perf_counter()
+    print(IllegalMoves)
+    print(str((end - start) * 1000) + " ms" )
     print("InitMoveCount", InitMoveCount)
     print("ResponseMoveCount", ResponseMoveCount)
     

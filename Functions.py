@@ -77,7 +77,7 @@ def InvSquareNumb(Square):
     return File + Rank
 
 def MakeMove(InputFromSquare, InputToSquare, InitBoardConfig, LegalMoves):
-    BoardConfig = InitBoardConfig
+    BoardConfig = InitBoardConfig[:]
     if InputToSquare in LegalMoves[1]:
         BoardConfig[0][InputToSquare] = BoardConfig[0][InputFromSquare]
         BoardConfig[1][InputToSquare] = BoardConfig[1][InputFromSquare]

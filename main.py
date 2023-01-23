@@ -137,7 +137,7 @@ def drawChessPieces(screen, BoardConfig, images):
 def drawHighlight(screen, HasSelectedPiece):
     for i in range(len(HasSelectedPiece[1][1])):
         row, column = Functions.brdnumtorowcol(HasSelectedPiece[1][1][i])
-        pygame.draw.circle(screen, (109, 113, 46, 50), (row*squareHeight + squareHeight / 2, column*squareWidth + squareWidth / 2), squareWidth // 8)
+        pygame.draw.circle(screen, (109, 113, 46, 10), (row*squareHeight + squareHeight / 2, column*squareWidth + squareWidth / 2), squareWidth // 8)
 
 if __name__ == "__main__":
     main()
