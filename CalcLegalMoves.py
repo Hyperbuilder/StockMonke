@@ -153,36 +153,38 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
     for PossibleMove in range(len(InitPseudoLegalMoves[0])):
         InitBoardConfig  = [x[:] for x in InputInitBoardConfig]
         FirstItBoardConfig = Functions.MakeMove(InitPseudoLegalMoves[0][PossibleMove], InitPseudoLegalMoves[1][PossibleMove], InitBoardConfig, InitPseudoLegalMoves)[:]
-
+        
         SecondItPseudoLegalMoves = CalcPseudoLegalMoves(FirstItBoardConfig, not WhiteToMove)
-        Functions.PrintChessBoardLegalMovesForPiece(SecondItPseudoLegalMoves)
-
+        #Functions.PrintChessBoardLegalMovesForPiece(SecondItPseudoLegalMoves)
+        Functions.PrintLegalMoveList(SecondItPseudoLegalMoves)
+        Functions.PrintChessBoard(FirstItBoardConfig)
+        ResponseMoveCount += 1
+        
         for Index in range(len(SecondItPseudoLegalMoves[1])):
             if SecondItPseudoLegalMoves[2][Index] == True:
                 if FirstItBoardConfig[0][SecondItPseudoLegalMoves[1][Index]] == 6:
-                    print(SecondItPseudoLegalMoves[1][Index])
                     IllegalMoves.append(SecondItPseudoLegalMoves[1][Index])
-
 
 
         
         FirstItBoardConfig.clear()
         InitMoveCount += 1
 
-    Functions.PrintLegalMoveList(InitPseudoLegalMoves)
+  
+
     for Move in IllegalMoves:
         if Move in InitPseudoLegalMoves[1]:
             Index = InitPseudoLegalMoves[1].index(Move)
-            if InputInitBoardConfig[0][InitPseudoLegalMoves[0][Index]] == 6:
+            
+            if InputInitBoardConfig[0][InitPseudoLegalMoves[0][Move]] == 6:
                 InitPseudoLegalMoves[0].pop(Index)
                 InitPseudoLegalMoves[1].pop(Index)
                 InitPseudoLegalMoves[2].pop(Index)
-    Functions.PrintLegalMoveList(InitPseudoLegalMoves)
+    
+    
+    LegalMoves = InitPseudoLegalMoves
 
-
-
-        
-  
+    #Functions.PrintLegalMoveList(LegalMoves)
     
 
     end = time.perf_counter()
