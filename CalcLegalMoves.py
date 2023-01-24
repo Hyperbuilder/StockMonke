@@ -35,6 +35,8 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
     LegalMoves = [[],[],[]]
 
     Side, NotSide = Functions.WhiteToMoveTONumber(WhiteToMove)
+
+
     for PieceIndex in range(64):
         if BoardConfig[1][PieceIndex] == Side:
                     Piece = BoardConfig[0][PieceIndex]
@@ -75,13 +77,17 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
                             if BoardConfig[1][PieceIndex] == 1:
                                 IndexNumber = Board64x[0][PieceIndex] - 20
                                 IndexNumber120x = Board120x[0][IndexNumber]
+                                IndexNumber2 = Board64x[0][PieceIndex] - 10
+                                IndexNumber120x2 = Board120x[0][IndexNumber2]
                             elif BoardConfig[1][PieceIndex] == 2:
                                 IndexNumber = Board64x[0][PieceIndex] + 20
                                 IndexNumber120x = Board120x[0][IndexNumber]
+                                IndexNumber2 = Board64x[0][PieceIndex] + 10
+                                IndexNumber120x2 = Board120x[0][IndexNumber2]
 
                             if IndexNumber == -1: break
 
-                            if BoardConfig[1][IndexNumber120x] == 0:
+                            if BoardConfig[1][IndexNumber120x] == 0 and BoardConfig[1][IndexNumber120x2] == 0:
                                 LegalMoves[0].append(PieceIndex)
                                 LegalMoves[1].append(IndexNumber120x)
                                 LegalMoves[2].append(False)
@@ -119,7 +125,7 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
                                     if IndexNumber120x not in LegalMoves:
                                         LegalMoves[0].append(PieceIndex)
                                         LegalMoves[1].append(IndexNumber120x)
-                                        LegalMoves[2].append(True)            
+                                        LegalMoves[2].append(True)    
     return LegalMoves
 
 
@@ -139,9 +145,7 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
     InitMoveCount = 0
     ResponseMoveCount = 0
 
-    LegalMoves = [[],[],[]]
-
-    InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove)
+    LegalMoves = InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove)
 
     IllegalMoves = []
     
@@ -156,42 +160,52 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
         
         SecondItPseudoLegalMoves = CalcPseudoLegalMoves(FirstItBoardConfig, not WhiteToMove)
         #Functions.PrintChessBoardLegalMovesForPiece(SecondItPseudoLegalMoves)
-        Functions.PrintLegalMoveList(SecondItPseudoLegalMoves)
-        Functions.PrintChessBoard(FirstItBoardConfig)
+        #Functions.PrintLegalMoveList(SecondItPseudoLegalMoves)
+        #Functions.PrintChessBoard(FirstItBoardConfig)
         ResponseMoveCount += 1
         
         for Index in range(len(SecondItPseudoLegalMoves[1])):
             if SecondItPseudoLegalMoves[2][Index] == True:
                 if FirstItBoardConfig[0][SecondItPseudoLegalMoves[1][Index]] == 6:
-                    IllegalMoves.append(SecondItPseudoLegalMoves[1][Index])
-
-
-        
+                    if PossibleMove not in IllegalMoves:
+                        IllegalMoves.append(PossibleMove)
+                    
+                    
         FirstItBoardConfig.clear()
         InitMoveCount += 1
 
   
+    #Functions.PrintLegalMoveList(InitPseudoLegalMoves)
+    print(IllegalMoves)
 
-    for Move in IllegalMoves:
-        if Move in InitPseudoLegalMoves[1]:
-            Index = InitPseudoLegalMoves[1].index(Move)
-            
-            if InputInitBoardConfig[0][InitPseudoLegalMoves[0][Move]] == 6:
-                InitPseudoLegalMoves[0].pop(Index)
-                InitPseudoLegalMoves[1].pop(Index)
-                InitPseudoLegalMoves[2].pop(Index)
+    for RemoveMove in reversed(range(len(IllegalMoves))):
+        LegalMoves[0].pop(IllegalMoves[RemoveMove])
+        LegalMoves[1].pop(IllegalMoves[RemoveMove])
+        LegalMoves[2].pop(IllegalMoves[RemoveMove])
     
-    
-    LegalMoves = InitPseudoLegalMoves
 
     #Functions.PrintLegalMoveList(LegalMoves)
     
 
     end = time.perf_counter()
-    print(IllegalMoves)
+    #print(LegalMoves)
+    #Functions.PrintLegalMoveList(LegalMoves)
+    #Functions.PrintChessBoard(InputInitBoardConfig)
     print(str((end - start) * 1000) + " ms" )
-    print("InitMoveCount", InitMoveCount)
-    print("ResponseMoveCount", ResponseMoveCount)
+    #print("InitMoveCount", InitMoveCount)
+    #print("ResponseMoveCount", ResponseMoveCount)
+
+    AmountOfMoves = len(LegalMoves[0])
+
+    isCheckmate = False
+    print(len(LegalMoves[0]))
+    if len(LegalMoves[0]) == 0:
+        isCheckmate = True
+        print(isCheckmate)
+        quit()
+  
+    return LegalMoves, isCheckmate, AmountOfMoves
+  
     
     
 

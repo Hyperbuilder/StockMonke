@@ -5,6 +5,7 @@ import csv
 import math
 import engine
 import Functions
+import CalcLegalMoves
 
 
 BoardConfig = engine.BoardConfig
@@ -82,7 +83,9 @@ def main():
                     if BoardConfig[0][mouseBoardLocation] != 0:
                         if BoardConfig[1][mouseBoardLocation] == Side:
                             HasSelectedPiece = engine.SelectPiece(mouseBoardLocation, BoardConfig, WhiteToMove)
-                            print(HasSelectedPiece)
+                            if HasSelectedPiece[0] == None:
+                                gameRunning = False
+                                break
                 elif mouseBoardLocation == HasSelectedPiece[2]:
                     HasSelectedPiece = [False, None, None]
                 elif HasSelectedPiece[0] == True:
@@ -90,10 +93,10 @@ def main():
                     if moveresult[0] == True:
                         CapturedPieces.append(moveresult[1])
                         WhiteToMove = not WhiteToMove
+                        #print(CapturedPieces)
                         HasSelectedPiece = [False, None, None]
                     else: 
                         print("not a possible move")
-
 
         drawScreen(screen, font, selectedBoardTheme, BoardConfig, images, HasSelectedPiece)
 

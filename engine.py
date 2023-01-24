@@ -39,12 +39,20 @@ PieceDict = {
         9 : 'B'
     }
 
+
+
 def SelectPiece(SquareFrom, BoardConfig, WhiteToMove):
-    LegalMovesForPiece = CalcLegalMoves.PieceSpecificMoves(SquareFrom, CalcLegalMoves.CalcPseudoLegalMoves(BoardConfig, WhiteToMove))
-    print(LegalMovesForPiece)
-    Functions.PrintChessBoard(BoardConfig)
-    Functions.PrintChessBoardLegalMovesForPiece(LegalMovesForPiece)
-    Functions.PrintLegalMoveList(LegalMovesForPiece)
+    FinalLegalMoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove)
+
+    if FinalLegalMoves[1] == True:
+        return print('GAme Over')
+
+    LegalMovesForPiece = CalcLegalMoves.PieceSpecificMoves(SquareFrom, FinalLegalMoves[0])
+
+    #print(LegalMovesForPiece)
+    #Functions.PrintChessBoard(BoardConfig)
+    #Functions.PrintChessBoardLegalMovesForPiece(LegalMovesForPiece)
+    #Functions.PrintLegalMoveList(LegalMovesForPiece)
 
     if len(LegalMovesForPiece) != 0:
         return True, LegalMovesForPiece, SquareFrom
@@ -60,6 +68,8 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves):
 
         BoardConfig[0][InputFromSquare] = 0
         BoardConfig[1][InputFromSquare] = 0
+
+
 
         if LegalMoves[2][PieceIndex] == True:
             Capture = ((BoardConfig[0][InputToSquare], BoardConfig[1][InputToSquare]))
