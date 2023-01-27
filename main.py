@@ -20,8 +20,8 @@ BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
 WhiteToMove = Functions.ConvertFENString(FEN)[1]
 
 #Standaard waarden voor venster en schaakbord
-width = 1024
-height = 1024
+width = 512
+height = 512
 xDimension = 8
 yDimension = 8
 squareWidth = width / xDimension

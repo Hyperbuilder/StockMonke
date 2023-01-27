@@ -35,7 +35,9 @@ def perft(depth, BoardConfig, WhiteToMove):
 
 		return count
 
+
 start = time.perf_counter()
-print(perft(4, BoardConfig, WhiteToMove))
+print(perft(3, BoardConfig, WhiteToMove))
 end = time.perf_counter()
 print(str((end - start) * 1000) + " ms" )
+
