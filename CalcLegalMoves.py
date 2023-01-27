@@ -141,7 +141,7 @@ def PieceSpecificMoves(SelectedPiece, LegalMoves):
 
 
 def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
-    start = time.perf_counter()
+    #start = time.perf_counter()
     InitMoveCount = 0
     ResponseMoveCount = 0
 
@@ -176,7 +176,7 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
 
   
     #Functions.PrintLegalMoveList(InitPseudoLegalMoves)
-    print(IllegalMoves)
+    #print(IllegalMoves)
 
     for RemoveMove in reversed(range(len(IllegalMoves))):
         LegalMoves[0].pop(IllegalMoves[RemoveMove])
@@ -187,22 +187,21 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
     #Functions.PrintLegalMoveList(LegalMoves)
     
 
-    end = time.perf_counter()
+    #end = time.perf_counter()
     #print(LegalMoves)
     #Functions.PrintLegalMoveList(LegalMoves)
     #Functions.PrintChessBoard(InputInitBoardConfig)
-    print(str((end - start) * 1000) + " ms" )
+    #print(str((end - start) * 1000) + " ms" )
     #print("InitMoveCount", InitMoveCount)
     #print("ResponseMoveCount", ResponseMoveCount)
 
     AmountOfMoves = len(LegalMoves[0])
 
     isCheckmate = False
-    print(len(LegalMoves[0]))
+    #print(len(LegalMoves[0]))
     if len(LegalMoves[0]) == 0:
         isCheckmate = True
-        print(isCheckmate)
-        quit()
+        #print(isCheckmate)
   
     return LegalMoves, isCheckmate, AmountOfMoves
   

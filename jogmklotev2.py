@@ -22,7 +22,15 @@ WhiteToMove = Functions.ConvertFENString(FEN)[1]
 def perft(depth, BoardConfig, WhiteToMove):
 
 	legalmoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove)[0]
+
+	Side = bool 
+
+	if depth % 2 != 0 and depth > 0:
+		Side = WhiteToMove
+	elif depth > 0:
+		Side = not WhiteToMove
 	
+
 	if depth == 1:    
 		return len(legalmoves[0])
 
@@ -30,14 +38,22 @@ def perft(depth, BoardConfig, WhiteToMove):
 		count = 0
 
 		for move in range(len(legalmoves[0])):
-			Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfig, legalmoves)
-			count += perft(depth - 1, BoardConfig, not WhiteToMove)
+			
+			BoardConfigReset = [x[:] for x in BoardConfig]
+
+
+			BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
+			count += perft(depth - 1, BoardConfigReset, not Side)
+
+			
+			
+			
 
 		return count
 
 
 start = time.perf_counter()
-print(perft(3, BoardConfig, WhiteToMove))
+print(perft(5, BoardConfig, WhiteToMove))
 end = time.perf_counter()
 print(str((end - start) * 1000) + " ms" )
 
