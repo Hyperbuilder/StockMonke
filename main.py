@@ -83,7 +83,7 @@ def main():
                     if BoardConfig[0][mouseBoardLocation] != 0:
                         if BoardConfig[1][mouseBoardLocation] == Side:
                             HasSelectedPiece = engine.SelectPiece(mouseBoardLocation, BoardConfig, WhiteToMove)
-                            if HasSelectedPiece[0] == None:
+                            if HasSelectedPiece[1] == None:
                                 gameRunning = False
                                 break
                 elif mouseBoardLocation == HasSelectedPiece[2]:
@@ -140,7 +140,10 @@ def drawChessPieces(screen, BoardConfig, images):
 def drawHighlight(screen, HasSelectedPiece):
     for i in range(len(HasSelectedPiece[1][1])):
         row, column = Functions.brdnumtorowcol(HasSelectedPiece[1][1][i])
-        pygame.draw.circle(screen, (109, 113, 46, 10), (row*squareHeight + squareHeight / 2, column*squareWidth + squareWidth / 2), squareWidth // 8)
+        pygame.draw.circle(screen, (109, 113, 46), (row*squareHeight + squareHeight / 2, column*squareWidth + squareWidth / 2), squareWidth // 8)
+    Sqrow, Sqcolumn = Functions.brdnumtorowcol(HasSelectedPiece[2])
+    pygame.draw.circle(screen, (200, 70, 46), (Sqrow*squareHeight + squareHeight / 2, Sqcolumn*squareWidth + squareWidth / 2), squareWidth // 2, 5)
+
 
 if __name__ == "__main__":
     main()
