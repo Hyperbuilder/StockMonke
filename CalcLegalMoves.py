@@ -140,7 +140,7 @@ def PieceSpecificMoves(SelectedPiece, LegalMoves):
     return PieceSpecificLegalMoves
 
 
-def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
+def FinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
     #start = time.perf_counter()
     InitMoveCount = 0
     ResponseMoveCount = 0
@@ -148,6 +148,8 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
     LegalMoves = InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove)
 
     IllegalMoves = []
+
+    KQkqCanCastle
     
 
     # Functions.PrintChessBoard(InputInitBoardConfig)
@@ -185,8 +187,6 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
     
 
     #Functions.PrintLegalMoveList(LegalMoves)
-    
-
     #end = time.perf_counter()
     #print(LegalMoves)
     #Functions.PrintLegalMoveList(LegalMoves)
@@ -203,7 +203,7 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove):
         isCheckmate = True
         #print(isCheckmate)
   
-    return LegalMoves, isCheckmate, AmountOfMoves
+    return LegalMoves, isCheckmate, AmountOfMoves, KQkqCanCastle 
   
     
     

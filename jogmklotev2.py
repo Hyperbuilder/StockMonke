@@ -7,9 +7,13 @@ FEN = input("FEN: ")
 if FEN == "def":
         FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
 
-BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
+ConvertedFEN = Functions.ConvertFENString(FEN)
 
-WhiteToMove = Functions.ConvertFENString(FEN)[1]
+BoardConfig = [list(map(int, i)) for i in ConvertedFEN[0]]
+
+WhiteToMove = ConvertedFEN[1]
+
+KQkqCanCastle = ConvertedFEN[2]
 
 depth = int(input("Depth: "))
 
@@ -21,9 +25,9 @@ depth = int(input("Depth: "))
 
 #Perft
 
-def perft(depth, BoardConfig, WhiteToMove):
+def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle):
 
-	legalmoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove)[0]
+	legalmoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle)[0]
 
 	Side = bool 
 
@@ -46,24 +50,24 @@ def perft(depth, BoardConfig, WhiteToMove):
 			BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
 			result = perft(depth - 1, BoardConfigReset, Side)
 			count += result
-			print(legalmoves[0][move], count, result)
 		return count
 
 
 start = time.perf_counter()
-perftresult = perft(depth, BoardConfig, WhiteToMove)
+perftresult = perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle)
 end = time.perf_counter()
 print(perftresult, str((end - start) * 1000) + " ms")
-if depth == 1: 
-	print(str(20-perftresult) + " missing, expected 20 recieved: " + str(perftresult))
-elif depth == 2:
-	print(str(400-perftresult) + " missing, expected 400 recieved: " + str(perftresult))
-elif depth == 3:
-	print(str(8902-perftresult) + " missing, expected 8902 recieved: " + str(perftresult))
-elif depth == 4:
-	print(str(197281-perftresult) + " missing, expected 197281 recieved: " + str(perftresult))
-elif depth == 5:
-	print(str(4865609-perftresult) + " missing, expected 4865609 recieved: " + str(perftresult))
+if FEN == "def": 
+	if depth == 1: 
+		print(str(20-perftresult) + " missing, expected 20 recieved: " + str(perftresult))
+	elif depth == 2:
+		print(str(400-perftresult) + " missing, expected 400 recieved: " + str(perftresult))
+	elif depth == 3:
+		print(str(8902-perftresult) + " missing, expected 8902 recieved: " + str(perftresult))
+	elif depth == 4:
+		print(str(197281-perftresult) + " missing, expected 197281 recieved: " + str(perftresult))
+	elif depth == 5:
+		print(str(4865609-perftresult) + " missing, expected 4865609 recieved: " + str(perftresult))
 
 #27-1-2023 17:43 Intel Core i7-8565U: 
 # Depth 1: 20			te verwaarlozen				Correct
@@ -71,3 +75,4 @@ elif depth == 5:
 # Depth 3: 8864  		691.5813000014168 ms		38 missing, expected 8902 recieved: 8864
 # Depth 4: 197217		16530.18570000131 ms		64 missing, expected 197281 recieved: 197217
 # Depth 5: 4844186		371445.6950999993 ms 		21423 missing, expected 4865609 recieved: 4844186
+# Depth 6: 

@@ -19,6 +19,8 @@ BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
 
 WhiteToMove = Functions.ConvertFENString(FEN)[1]
 
+KQkqcanCastle = [True, True, True, True]
+
 #Standaard waarden voor venster en schaakbord
 width = 512
 height = 512
