@@ -27,45 +27,38 @@ DivideDepth = int(input("Divide Depth: "))
 #Perft
 
 def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):
+    legalmoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove, True)[0]
 
-	legalmoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove, True)[0]
+    Side = bool
 
-	Side = bool 
+    if depth % 2 != 0 and depth > 0:
+        Side = WhiteToMove
+    elif depth % 2 == 0 and depth > 0:
+        Side = not WhiteToMove
 
-
-	if depth % 2 != 0 and depth > 0:
-		Side = WhiteToMove
-	elif depth % 2 == 0 and depth > 0:
-		Side = not WhiteToMove
-	
-
-	if depth == 1: 
-		return len(legalmoves[0])
-		
-	count = 0
-	if depth <= DivideDepth:
-		for move in range(len(legalmoves[0])):
+    if depth == 1:
+        return len(legalmoves[0])
+        
+    count = 0
+    if depth <= DivideDepth:
+        for move in range(len(legalmoves[0])):
+            BoardConfigReset = [x[:] for x in BoardConfig]
+            BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
 			
-			BoardConfigReset = [x[:] for x in BoardConfig]
+            Nodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle)
+            count += Nodes
+			
+    else:
+        for move in range(len(legalmoves[0])):
+            BoardConfigReset = [x[:] for x in BoardConfig]
+            BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
+            SubNodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle, DivideDepth)
+            print(Functions.InvSquareNumb(legalmoves[0][move]), Functions.InvSquareNumb(legalmoves[1][move]), ":",SubNodes)
+            count += SubNodes
+			
 
-			BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
-			Nodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle)
-			count += Nodes
-	else:
-		for move in range(len(legalmoves[0])):
-		
-			BoardConfigReset = [x[:] for x in BoardConfig]
+    return count
 
-			BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
-
-			SubNodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle, DivideDepth)
-
-			# print(Functions.InvSquareNumb(legalmoves[0][move]), Functions.InvSquareNumb(legalmoves[1][move]), ":",SubNodes)
-			# Functions.PrintChessBoard(BoardConfigReset)
-			# print()
-			count += SubNodes
-
-	return count
 
 
 start = time.perf_counter()
