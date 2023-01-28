@@ -5,7 +5,7 @@ import time
 
 FEN = input("FEN: ")
 if FEN == "def":
-        FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+        FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq'
 
 ConvertedFEN = Functions.ConvertFENString(FEN)
 
@@ -13,9 +13,10 @@ BoardConfig = [list(map(int, i)) for i in ConvertedFEN[0]]
 
 WhiteToMove = ConvertedFEN[1]
 
-KQkqCanCastle = ConvertedFEN[2]
+KQkqCanCastle = True #ConvertedFEN[2]
 
 depth = int(input("Depth: "))
+DivideDepth = int(input("Divide Depth: "))
 
 
 #CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove)
@@ -25,11 +26,12 @@ depth = int(input("Depth: "))
 
 #Perft
 
-def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle):
+def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):
 
-	legalmoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle)[0]
+	legalmoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove, True)[0]
 
 	Side = bool 
+
 
 	if depth % 2 != 0 and depth > 0:
 		Side = WhiteToMove
@@ -37,27 +39,40 @@ def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle):
 		Side = not WhiteToMove
 	
 
-	if depth == 1:    
+	if depth == 1: 
 		return len(legalmoves[0])
-
-	elif depth > 1:
-		count = 0
-
+		
+	count = 0
+	if depth <= DivideDepth:
 		for move in range(len(legalmoves[0])):
 			
 			BoardConfigReset = [x[:] for x in BoardConfig]
 
 			BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
-			result = perft(depth - 1, BoardConfigReset, Side)
-			count += result
-		return count
+			Nodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle)
+			count += Nodes
+	else:
+		for move in range(len(legalmoves[0])):
+		
+			BoardConfigReset = [x[:] for x in BoardConfig]
+
+			BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
+
+			SubNodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle, DivideDepth)
+
+			# print(Functions.InvSquareNumb(legalmoves[0][move]), Functions.InvSquareNumb(legalmoves[1][move]), ":",SubNodes)
+			# Functions.PrintChessBoard(BoardConfigReset)
+			# print()
+			count += SubNodes
+
+	return count
 
 
 start = time.perf_counter()
-perftresult = perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle)
+perftresult = perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth)
 end = time.perf_counter()
 print(perftresult, str((end - start) * 1000) + " ms")
-if FEN == "def": 
+if FEN == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq": 
 	if depth == 1: 
 		print(str(20-perftresult) + " missing, expected 20 recieved: " + str(perftresult))
 	elif depth == 2:
@@ -69,6 +84,8 @@ if FEN == "def":
 	elif depth == 5:
 		print(str(4865609-perftresult) + " missing, expected 4865609 recieved: " + str(perftresult))
 
+
+
 #27-1-2023 17:43 Intel Core i7-8565U: 
 # Depth 1: 20			te verwaarlozen				Correct
 # Depth 2: 400			te verwaarlozen				Correct
@@ -76,3 +93,5 @@ if FEN == "def":
 # Depth 4: 197217		16530.18570000131 ms		64 missing, expected 197281 recieved: 197217
 # Depth 5: 4844186		371445.6950999993 ms 		21423 missing, expected 4865609 recieved: 4844186
 # Depth 6: 
+
+# jogm met betere pc == tijden / 2 ongeveer

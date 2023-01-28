@@ -59,20 +59,22 @@ def ConvertFENString(FEN):
         elif Turn.lower() == 'b':
             WhiteToMove = False
     
-    KQkqcanCastle = [False, False, False, False]
-    Castles = list(FEN.split(" ")[2])
-    for Castle in Castles:
-        if Castle == 'K':
-            KQkqcanCastle[0] = True
-        elif Castle == 'Q':
-            KQkqcanCastle[1] = True
-        elif Castle == 'k':
-            KQkqcanCastle[2] = True
-        elif Castle == 'q':
-            KQkqcanCastle[3] = True
+    
+
+    # KQkqcanCastle = [False, False, False, False]
+    # Castles = list(FEN.split(" ")[2])
+    # for Castle in Castles:
+    #     if Castle == 'K':
+    #         KQkqcanCastle[0] = True
+    #     elif Castle == 'Q':
+    #         KQkqcanCastle[1] = True
+    #     elif Castle == 'k':
+    #         KQkqcanCastle[2] = True
+    #     elif Castle == 'q':
+    #         KQkqcanCastle[3] = True
 
 
-    return FinalBoard, WhiteToMove, KQkqcanCastle
+    return FinalBoard, WhiteToMove, #KQkqcanCastle
 
 
 

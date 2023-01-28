@@ -42,7 +42,7 @@ PieceDict = {
 
 
 def SelectPiece(SquareFrom, BoardConfig, WhiteToMove):
-    FinalLegalMoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove)
+    FinalLegalMoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove, True)
 
     if FinalLegalMoves[1] == True:
         return print('GAme Over')

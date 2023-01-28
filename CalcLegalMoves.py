@@ -25,8 +25,8 @@ OffsetValues = [
     [-11, -10, -9, -1, 1, 9, 10, 11]]   #King
 
 #kijken of pawn zich op eerste rij bevindt, zo ja double push mogelijk
-CheckPawnOnFirstRowW = [81, 82, 83, 84, 85, 86, 87, 88]
-CheckPawnOnFirstRowB = [31, 32, 33, 34, 35, 36, 37, 38]
+CheckPawnOnFirstRow = [81, 82, 83, 84, 85, 86, 87, 88, 31, 32, 33, 34, 35, 36, 37, 38]
+
 
 
 #Calc pseudo legal moves (alle moves zonder dat er met schaak, en passant of rokeren te maken heeft), moves voor specific pieces komt in andere functie
@@ -71,61 +71,53 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
                                     breakpoint
                                     
                                 if IsSlidingPiece[Piece] == False: break                  
-                    else:
-                        #Double pawn moves
-                        if Board64x[0][PieceIndex] in CheckPawnOnFirstRowW or Board64x[0][PieceIndex] in CheckPawnOnFirstRowB:
-                            if BoardConfig[1][PieceIndex] == 1:
-                                IndexNumber = Board64x[0][PieceIndex] - 20
-                                IndexNumber120x = Board120x[0][IndexNumber]
-                                IndexNumber2 = Board64x[0][PieceIndex] - 10
-                                IndexNumber120x2 = Board120x[0][IndexNumber2]
-                            elif BoardConfig[1][PieceIndex] == 2:
-                                IndexNumber = Board64x[0][PieceIndex] + 20
-                                IndexNumber120x = Board120x[0][IndexNumber]
-                                IndexNumber2 = Board64x[0][PieceIndex] + 10
-                                IndexNumber120x2 = Board120x[0][IndexNumber2]
-
-                            if IndexNumber == -1: break
-
-                            if BoardConfig[1][IndexNumber120x] == 0 and BoardConfig[1][IndexNumber120x2] == 0:
-                                LegalMoves[0].append(PieceIndex)
-                                LegalMoves[1].append(IndexNumber120x)
-                                LegalMoves[2].append(False)
-                            else: breakpoint
-                        
-                        #Normale pawn moves
-                        if BoardConfig[1][PieceIndex] == 1:
-                            IndexNumber = Board64x[0][PieceIndex] - 10
-                            IndexNumber120x = Board120x[0][IndexNumber]   
-                        else:
-                            IndexNumber = Board64x[0][PieceIndex] + 10
-                            IndexNumber120x = Board120x[0][IndexNumber]
-                        
-                        if BoardConfig[1][IndexNumber120x] == 0:
-                            LegalMoves[0].append(PieceIndex)
-                            LegalMoves[1].append(IndexNumber120x)
-                            LegalMoves[2].append(False)
-                        
-                        else: breakpoint
-
-                        #Pawn captures
-                        for AmountOffsetDirLoop in range(OffsetDirAmount[Piece]):
+                    else: #pawn moves
+                       
+                        for AmountOffsetDirLoop in range(2):
+                            if BoardConfig[1][PieceIndex] == 0: break
                             if BoardConfig[1][PieceIndex] == 1:
                                 IndexNumber = Board64x[0][PieceIndex] + OffsetValues[Piece][AmountOffsetDirLoop]
                             else:
                                 IndexNumber = Board64x[0][PieceIndex] + OffsetValues[Piece][AmountOffsetDirLoop + 2]
-                            if IndexNumber <= 120:
-                                IndexNumber120x = Board120x[0][IndexNumber]
+
+                            if IndexNumber < 120:
+                                IndexNumber120xCapture = Board120x[0][IndexNumber]
                             else:
-                                IndexNumber120x = -1
-                            if IndexNumber120x == -1: break
+                                break
+
+                            if IndexNumber120xCapture == -1: break
                             
-                            if BoardConfig[1][IndexNumber120x] != 0:
-                                if BoardConfig[1][IndexNumber120x] == NotSide:
-                                    if IndexNumber120x not in LegalMoves:
+                            if BoardConfig[1][IndexNumber120xCapture] != 0:
+                                if BoardConfig[1][IndexNumber120xCapture] == NotSide:
                                         LegalMoves[0].append(PieceIndex)
-                                        LegalMoves[1].append(IndexNumber120x)
+                                        LegalMoves[1].append(IndexNumber120xCapture)
                                         LegalMoves[2].append(True)    
+
+                                        
+
+                        if BoardConfig[1][PieceIndex] == 1:
+                            IndexNumber120xSingle = Board120x[0][Board64x[0][PieceIndex] - 10]
+                            IndexNumber120xDouble = Board120x[0][Board64x[0][PieceIndex] - 20]
+                        else:
+                            IndexNumber120xSingle = Board120x[0][Board64x[0][PieceIndex] + 10]
+                            IndexNumber120xDouble = Board120x[0][Board64x[0][PieceIndex] + 20]
+
+                        if IndexNumber120xDouble == -1 or IndexNumber120xSingle == -1: break
+
+                        if BoardConfig[1][IndexNumber120xSingle] == 0 and BoardConfig[1][IndexNumber120xDouble] == 0 and Board64x[0][PieceIndex] in CheckPawnOnFirstRow:
+                            LegalMoves[0].append(PieceIndex)
+                            LegalMoves[1].append(IndexNumber120xDouble)
+                            LegalMoves[2].append(False)
+                        
+                        if BoardConfig[1][IndexNumber120xSingle] == 0: 
+                            LegalMoves[0].append(PieceIndex)
+                            LegalMoves[1].append(IndexNumber120xSingle)
+                            LegalMoves[2].append(False)
+                        else: breakpoint
+
+
+                        
+                        
     return LegalMoves
 
 
@@ -203,7 +195,7 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
         isCheckmate = True
         #print(isCheckmate)
   
-    return LegalMoves, isCheckmate, AmountOfMoves, KQkqCanCastle 
+    return LegalMoves, isCheckmate, AmountOfMoves
   
     
     

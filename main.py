@@ -72,7 +72,7 @@ def main():
     CapturedPieces = []
 
     while gameRunning:
-        Side, NotSide = Functions.WhiteToMoveTONumber(WhiteToMove)
+        Side, notSide = Functions.WhiteToMoveTONumber(WhiteToMove)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -80,7 +80,7 @@ def main():
                 print("Window closed")
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouseBoardLocation = Functions.SquareNumb(Functions.getBoardLocationCoords(xBoardCoordinates, yBoardCoordinates, width, height))
-
+                
                 if HasSelectedPiece == [False, None, None]:
                     if BoardConfig[0][mouseBoardLocation] != 0:
                         if BoardConfig[1][mouseBoardLocation] == Side:
