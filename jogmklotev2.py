@@ -44,16 +44,17 @@ def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):
         for move in range(len(legalmoves[0])):
             BoardConfigReset = [x[:] for x in BoardConfig]
             BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
-			
             Nodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle)
+            #Functions.PrintChessBoard(BoardConfigReset)
+            #print()
             count += Nodes
-			
     else:
         for move in range(len(legalmoves[0])):
             BoardConfigReset = [x[:] for x in BoardConfig]
             BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
             SubNodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle, DivideDepth)
             print(Functions.InvSquareNumb(legalmoves[0][move]), Functions.InvSquareNumb(legalmoves[1][move]), ":",SubNodes)
+            #Functions.PrintChessBoard(BoardConfigReset)
             count += SubNodes
 			
 
