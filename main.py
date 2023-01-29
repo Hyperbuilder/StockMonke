@@ -89,6 +89,8 @@ def main():
                     HasSelectedPiece = [False, None, None]
                 elif HasSelectedPiece[0] == True and mouseBoardLocation != HasSelectedPiece[2]:
                     moveresult = engine.SelectMoveTo(HasSelectedPiece[2], mouseBoardLocation, BoardConfig, HasSelectedPiece[1])
+
+
                     if moveresult[0] == True:
                         CapturedPieces.append(moveresult[1])
                         WhiteToMove = not WhiteToMove

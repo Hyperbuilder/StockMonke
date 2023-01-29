@@ -129,19 +129,15 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
                         #passanten terrein
                         
                         if len(EnPassant) == 1:
-                            
+                            print("Yippie  ")
                             IndexNumber120xEnPassant = 0
                             if Side == 1:
-                                print("yippie")
-                                print(Board120x[0][Board64x[0][PieceIndex]])
                                 # print(PieceIndex - 9 , EnPassant[0] - 8)
                                 # print(PieceIndex - 7 , EnPassant[0] - 8)
                                 if PieceIndex - 9 == EnPassant[0] - 8 or PieceIndex - 7 == EnPassant[0] - 8:
                                     IndexNumber120xEnPassant = EnPassant[0] - 8
                                 
                             elif Side == 2:
-                                print("yippiez")
-                                print(Board120x[0][Board64x[0][PieceIndex]])
                                 # print(PieceIndex + 9 , EnPassant[0] + 8)
                                 # print(PieceIndex + 7 , EnPassant[0] + 8)
                                 if PieceIndex + 9 == EnPassant[0] + 8 or PieceIndex + 7 == EnPassant[0] + 8:
@@ -258,15 +254,6 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves):
     Capture = ()
     if InputToSquare in LegalMoves[1]:
         
-        if InputToSquare in EnPassant and (InputFromSquare == InputToSquare - 16 or InputFromSquare == InputToSquare + 16):
-            if len(EnPassant) != 1:
-                EnPassant.clear()
-            EnPassant.append(InputToSquare)
-            
-            
-
-
-        
         PieceIndex = LegalMoves[1].index(InputToSquare)
 
         #Promotion system
@@ -292,6 +279,12 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves):
         BoardConfig[0][InputFromSquare] = 0
         BoardConfig[1][InputFromSquare] = 0
 
+
+        if InputToSquare in EnPassant and (InputFromSquare == InputToSquare - 16 or InputFromSquare == InputToSquare + 16):
+            EnPassant.clear()
+            EnPassant.append(InputToSquare)
+            print(EnPassant)
+            
     
             
         if LegalMoves[2][PieceIndex] == True:
