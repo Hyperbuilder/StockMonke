@@ -92,7 +92,6 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
                                         LegalMoves[0].append(PieceIndex)
                                         LegalMoves[1].append(IndexNumber120xCapture)
                                         LegalMoves[2].append(True)    
-
                                         
 
                         if BoardConfig[1][PieceIndex] == 1:
@@ -134,9 +133,6 @@ def PieceSpecificMoves(SelectedPiece, LegalMoves):
 
 def FinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
     #start = time.perf_counter()
-    InitMoveCount = 0
-    ResponseMoveCount = 0
-
     LegalMoves = InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove)
 
     IllegalMoves = []
@@ -156,7 +152,7 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
         #Functions.PrintChessBoardLegalMovesForPiece(SecondItPseudoLegalMoves)
         #Functions.PrintLegalMoveList(SecondItPseudoLegalMoves)
         #Functions.PrintChessBoard(FirstItBoardConfig)
-        ResponseMoveCount += 1
+    
         
         for Index in range(len(SecondItPseudoLegalMoves[1])):
             if SecondItPseudoLegalMoves[2][Index] == True:
@@ -166,7 +162,7 @@ def FinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
                     
                     
         FirstItBoardConfig.clear()
-        InitMoveCount += 1
+        
 
   
     #Functions.PrintLegalMoveList(InitPseudoLegalMoves)
