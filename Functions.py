@@ -88,19 +88,6 @@ def InvSquareNumb(Square):
     Rank = str(RankNum)
     return File + Rank
 
-def MakeMove(InputFromSquare, InputToSquare, InitBoardConfig, LegalMoves):
-    BoardConfig = InitBoardConfig[:]
-    if InputToSquare in LegalMoves[1]:
-        BoardConfig[0][InputToSquare] = BoardConfig[0][InputFromSquare]
-        BoardConfig[1][InputToSquare] = BoardConfig[1][InputFromSquare]
-
-        BoardConfig[0][InputFromSquare] = 0
-        BoardConfig[1][InputFromSquare] = 0
-    
-    return list(BoardConfig)
-  
-
-
 
 #functies voor debuggen zoals printen'
 def PrintChessBoard(BoardConfig):

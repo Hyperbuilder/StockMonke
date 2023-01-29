@@ -5,15 +5,12 @@ import csv
 import math
 import engine
 import Functions
-import CalcLegalMoves
 
-
-BoardConfig = engine.BoardConfig
 
 FEN = input("Insert FEN: ")
 
 if FEN == "def":
-        FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+        FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq'
 
 BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
 
@@ -22,8 +19,8 @@ WhiteToMove = Functions.ConvertFENString(FEN)[1]
 KQkqcanCastle = [True, True, True, True]
 
 #Standaard waarden voor venster en schaakbord
-width = 512
-height = 512
+width = 512 *2
+height = 512 *2
 xDimension = 8
 yDimension = 8
 squareWidth = width / xDimension
@@ -90,7 +87,7 @@ def main():
                                 break
                 elif mouseBoardLocation == HasSelectedPiece[2]:
                     HasSelectedPiece = [False, None, None]
-                elif HasSelectedPiece[0] == True:
+                elif HasSelectedPiece[0] == True and mouseBoardLocation != HasSelectedPiece[2]:
                     moveresult = engine.SelectMoveTo(HasSelectedPiece[2], mouseBoardLocation, BoardConfig, HasSelectedPiece[1])
                     if moveresult[0] == True:
                         CapturedPieces.append(moveresult[1])

@@ -1,4 +1,3 @@
-import CalcLegalMoves
 import engine
 import Functions
 import time
@@ -17,7 +16,7 @@ KQkqCanCastle = ConvertedFEN[2]
 
 depth = int(input("Depth: "))
 DivideDepth = int(input("Divide Depth: "))
-#CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove)
+#engine.CalcFinalLegalMoves(BoardConfig, WhiteToMove)
 
 
 
@@ -25,7 +24,7 @@ DivideDepth = int(input("Divide Depth: "))
 #Perft Debug Fuction
 #NIET NAAR KIJKEN
 def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):
-    legalmoves = CalcLegalMoves.FinalLegalMoves(BoardConfig, WhiteToMove, True)[0]
+    legalmoves = engine.CalcFinalLegalMoves(BoardConfig, WhiteToMove, True)[0]
 
     Side = bool
 
@@ -42,7 +41,7 @@ def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):
     if depth <= DivideDepth:
         for move in range(len(legalmoves[0])):
             BoardConfigReset = [x[:] for x in BoardConfig]
-            BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
+            BoardConfigReset = engine.MakeMoveCalculations(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
             Nodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle)
             #Functions.PrintChessBoard(BoardConfigReset)
             #print()
@@ -51,7 +50,7 @@ def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):
     else:
         for move in range(len(legalmoves[0])):
             BoardConfigReset = [x[:] for x in BoardConfig]
-            BoardConfigReset = Functions.MakeMove(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
+            BoardConfigReset = engine.MakeMoveCalculations(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
             SubNodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle, DivideDepth)
             print(Functions.InvSquareNumb(legalmoves[0][move]), Functions.InvSquareNumb(legalmoves[1][move]), ":",SubNodes)
             #Functions.PrintChessBoard(BoardConfigReset)
