@@ -84,6 +84,8 @@ def main():
                             HasSelectedPiece = engine.SelectPiece(mouseBoardLocation, BoardConfig, WhiteToMove, KQkqcanCastle)
                             if HasSelectedPiece[1] == None:
                                 gameRunning = False
+                                #if input("Reset? (Y/N): ").lower() == 'y':
+                                #    os.execv(sys.argv[0], sys.argv)
                                 break
                 elif mouseBoardLocation == HasSelectedPiece[2]:
                     HasSelectedPiece = [False, None, None]

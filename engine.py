@@ -129,7 +129,6 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                         LegalMoves[2].append(True)    
                         
                         #passanten terrein
-                        prit
                         if len(EnPassantStored) == 1 and (PieceIndex + 1 == EnPassantStored[0] or PieceIndex -1 == EnPassantStored[0]):
                             print(PieceIndex)
                             if Side == 1:
@@ -142,8 +141,6 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                
                                 IndexNumber120xEnPassant = EnPassantStored[0] + 8
                                 
-                            
-
                             LegalMoves[0].append(PieceIndex)
                             LegalMoves[1].append(IndexNumber120xEnPassant)
                             LegalMoves[2].append(True)
