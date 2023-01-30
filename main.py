@@ -81,7 +81,7 @@ def main():
                 if HasSelectedPiece == [False, None, None]:
                     if BoardConfig[0][mouseBoardLocation] != 0:
                         if BoardConfig[1][mouseBoardLocation] == Side:
-                            HasSelectedPiece = engine.SelectPiece(mouseBoardLocation, BoardConfig, WhiteToMove)
+                            HasSelectedPiece = engine.SelectPiece(mouseBoardLocation, BoardConfig, WhiteToMove, KQkqcanCastle)
                             if HasSelectedPiece[1] == None:
                                 gameRunning = False
                                 break

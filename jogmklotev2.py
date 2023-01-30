@@ -24,7 +24,7 @@ DivideDepth = int(input("Divide Depth: "))
 #Perft Debug Fuction
 #NIET NAAR KIJKEN
 def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):
-    legalmoves = engine.CalcFinalLegalMoves(BoardConfig, WhiteToMove, True)[0]
+    legalmoves = engine.CalcFinalLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle)[0]
 
     Side = bool
 
@@ -69,6 +69,9 @@ print(perftresult, str((end - start) * 1000) + " ms")
 
 
 
+
+
+# Functions.PrintLegalMoveList(engine.CalcPseudoLegalMoves(BoardConfig, WhiteToMove, main.KQkqcanCastle))
 
 
 

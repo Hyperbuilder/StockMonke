@@ -34,7 +34,8 @@ CheckBlackCastleSquares = [1, 2, 3, 5, 6]
 EnPassant = []
 
 #Calc pseudo legal moves (alle moves zonder dat er met schaak, en passant of rokeren te maken heeft), moves voor specific pieces komt in andere functie
-def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
+def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
+
 
     LegalMoves = [[],[],[]]
 
@@ -44,66 +45,66 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
         if BoardConfig[1][PieceIndex] == Side:
                     Piece = BoardConfig[0][PieceIndex]
                     if Piece != 1:
-                        if Piece != 6:
-                            for AmountOffsetDirLoop in range(OffsetDirAmount[Piece]):
-                                for RayAttackLoop in range(1, 8):
-                                    
-                                    IndexNumber = Board64x[0][PieceIndex] + OffsetValues[Piece][AmountOffsetDirLoop] * RayAttackLoop
+                        for AmountOffsetDirLoop in range(OffsetDirAmount[Piece]):
+                            for RayAttackLoop in range(1, 8):
+                                
+                                IndexNumber = Board64x[0][PieceIndex] + OffsetValues[Piece][AmountOffsetDirLoop] * RayAttackLoop
 
-                                    if IndexNumber <= 120:
-                                        IndexNumber120x = Board120x[0][IndexNumber]
-                                    else:
-                                        IndexNumber120x = -1
+                                if IndexNumber <= 120:
+                                    IndexNumber120x = Board120x[0][IndexNumber]
+                                else:
+                                    IndexNumber120x = -1
 
-                                    if IndexNumber120x == -1: break
+                                if IndexNumber120x == -1: break
 
-                                    if BoardConfig[1][IndexNumber120x] != 0:
-                                        if BoardConfig[1][IndexNumber120x] == NotSide:
-                                            if IndexNumber120x not in LegalMoves:
+                                if Piece == 6:
+                                    if Side == 1:
+                                        if KQkqCanCastle[0] == True:
+                                            if BoardConfig[1][5] == 0 and BoardConfig[1][6] == 0:
+                                                print("K Castle")
                                                 LegalMoves[0].append(PieceIndex)
-                                                LegalMoves[1].append(IndexNumber120x)
-                                                LegalMoves[2].append(True)
-                                            break
-                                        else:
-                                            break
+                                                LegalMoves[1].append(5)
+                                                LegalMoves[2].append(False)    
+                                        if KQkqCanCastle[1] == True:
                                             
-                                    elif BoardConfig[1][IndexNumber120x] == 0:
+                                            if BoardConfig[1][1] == 0 and BoardConfig[1][2] == 0 and BoardConfig[1][3] == 0:
+                                                print("Q Castle")
+                                                LegalMoves[0].append(PieceIndex)
+                                                LegalMoves[1].append(2)
+                                                LegalMoves[2].append(False)       
+                                    elif Side == 2:
+                                        if KQkqCanCastle[2] == True:
+                                            if BoardConfig[1][61] == 0 and BoardConfig[1][62] == 0:
+                                                print("K Castle")
+                                                LegalMoves[0].append(PieceIndex)
+                                                LegalMoves[1].append(62)
+                                                LegalMoves[2].append(False)    
+                                        if KQkqCanCastle[3] == True:
+                                            if BoardConfig[1][57] == 0 and BoardConfig[1][58] == 0 and BoardConfig[1][59] == 0:
+                                                print("Q Castle")
+                                                LegalMoves[0].append(PieceIndex)
+                                                LegalMoves[1].append(58)
+                                                LegalMoves[2].append(False)
+
+                                if BoardConfig[1][IndexNumber120x] != 0:
+                                    if BoardConfig[1][IndexNumber120x] == NotSide:
                                         if IndexNumber120x not in LegalMoves:
                                             LegalMoves[0].append(PieceIndex)
                                             LegalMoves[1].append(IndexNumber120x)
-                                            LegalMoves[2].append(False)
-                                        breakpoint
+                                            LegalMoves[2].append(True)
+                                        break
+                                    else:
+                                        break
                                         
-                                    if IsSlidingPiece[Piece] == False: break       
-                        elif Piece == 6: 
-                            for AmountOffsetDirLoop in range(OffsetDirAmount[Piece]):
+                                elif BoardConfig[1][IndexNumber120x] == 0:
+                                    if IndexNumber120x not in LegalMoves:
+                                        LegalMoves[0].append(PieceIndex)
+                                        LegalMoves[1].append(IndexNumber120x)
+                                        LegalMoves[2].append(False)
+                                    breakpoint
                                     
-                                    IndexNumber = Board64x[0][PieceIndex] + OffsetValues[Piece][AmountOffsetDirLoop]
-
-                                    if IndexNumber <= 120:
-                                        IndexNumber120x = Board120x[0][IndexNumber]
-                                    else:
-                                        IndexNumber120x = -1
-
-                                    if IndexNumber120x == -1: break
-
-                                    if BoardConfig[1][IndexNumber120x] != 0:
-                                        if BoardConfig[1][IndexNumber120x] == NotSide:
-                                            if IndexNumber120x not in LegalMoves:
-                                                LegalMoves[0].append(PieceIndex)
-                                                LegalMoves[1].append(IndexNumber120x)
-                                                LegalMoves[2].append(True)
-                                            break
-                                        else:
-                                            break
-                                            
-                                    elif BoardConfig[1][IndexNumber120x] == 0:
-                                        if IndexNumber120x not in LegalMoves:
-                                            LegalMoves[0].append(PieceIndex)
-                                            LegalMoves[1].append(IndexNumber120x)
-                                            LegalMoves[2].append(False)
-                                        breakpoint
-                                          
+                                if IsSlidingPiece[Piece] == False: break       
+                                        
                     else: #pawn moves
                        
                         for AmountOffsetDirLoop in range(2):
@@ -128,25 +129,7 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
                         
                         #passanten terrein
                         
-                        if len(EnPassant) == 1:
-                            print("Yippie  ")
-                            IndexNumber120xEnPassant = 0
-                            if Side == 1:
-                                # print(PieceIndex - 9 , EnPassant[0] - 8)
-                                # print(PieceIndex - 7 , EnPassant[0] - 8)
-                                if PieceIndex - 9 == EnPassant[0] - 8 or PieceIndex - 7 == EnPassant[0] - 8:
-                                    IndexNumber120xEnPassant = EnPassant[0] - 8
-                                
-                            elif Side == 2:
-                                # print(PieceIndex + 9 , EnPassant[0] + 8)
-                                # print(PieceIndex + 7 , EnPassant[0] + 8)
-                                if PieceIndex + 9 == EnPassant[0] + 8 or PieceIndex + 7 == EnPassant[0] + 8:
-                                    IndexNumber120xEnPassant = EnPassant[0] + 8
-                                      
-                            if IndexNumber120xEnPassant != 0:   
-                                LegalMoves[0].append(PieceIndex)
-                                LegalMoves[1].append(IndexNumber120xEnPassant)
-                                LegalMoves[2].append(True) 
+                        
                         
 
 
@@ -163,18 +146,12 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove):
                             LegalMoves[0].append(PieceIndex)
                             LegalMoves[1].append(IndexNumber120xDouble)
                             LegalMoves[2].append(False)
-                            EnPassant.append(IndexNumber120xDouble)
-                      
                         
                         if BoardConfig[1][IndexNumber120xSingle] == 0 and IndexNumber120xSingle != -1: 
                             LegalMoves[0].append(PieceIndex)
                             LegalMoves[1].append(IndexNumber120xSingle)
                             LegalMoves[2].append(False)
-
-                        
-                            
-                    
-                        
+         
     return LegalMoves
 
 
@@ -190,11 +167,8 @@ def PieceSpecificMoves(SelectedPiece, LegalMoves):
 
 
 def CalcFinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
-    LegalMoves = InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove)
+    LegalMoves = InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle)
     IllegalMoves = []
-    KQkqCanCastle = KQkqCanCastle
-    KingSideCastle = None
-    QueenSideCastle = None
 
 
     # if WhiteToMove == True:
@@ -210,7 +184,7 @@ def CalcFinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
         InitBoardConfig  = [x[:] for x in InputInitBoardConfig]
         FirstItBoardConfig = MakeMoveCalculations(InitPseudoLegalMoves[0][PossibleMove], InitPseudoLegalMoves[1][PossibleMove], InitBoardConfig, InitPseudoLegalMoves)[:]
         
-        SecondItPseudoLegalMoves = CalcPseudoLegalMoves(FirstItBoardConfig, not WhiteToMove)
+        SecondItPseudoLegalMoves = CalcPseudoLegalMoves(FirstItBoardConfig, not WhiteToMove, KQkqCanCastle)
         
         for Index in range(len(SecondItPseudoLegalMoves[1])):
             if SecondItPseudoLegalMoves[2][Index] == True:
@@ -237,8 +211,8 @@ def CalcFinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
     return LegalMoves, isCheckmate, AmountOfMoves
   
 
-def SelectPiece(SquareFrom, BoardConfig, WhiteToMove):
-    FinalLegalMoves = CalcFinalLegalMoves(BoardConfig, WhiteToMove, True)
+def SelectPiece(SquareFrom, BoardConfig, WhiteToMove, KQkqCanCastle):
+    FinalLegalMoves = CalcFinalLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle)
 
 
     if FinalLegalMoves[1] == True:
@@ -280,12 +254,6 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves):
         BoardConfig[1][InputFromSquare] = 0
 
 
-        if InputToSquare in EnPassant and (InputFromSquare == InputToSquare - 16 or InputFromSquare == InputToSquare + 16):
-            EnPassant.clear()
-            EnPassant.append(InputToSquare)
-            print(EnPassant)
-            
-    
             
         if LegalMoves[2][PieceIndex] == True:
             Capture = ((BoardConfig[0][InputToSquare], BoardConfig[1][InputToSquare]))
