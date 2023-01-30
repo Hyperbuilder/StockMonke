@@ -31,7 +31,8 @@ CheckPawnPromotion = [0, 1, 2, 3, 4, 5, 6, 7, 56, 57, 58, 59, 60, 61, 62, 63]
 CheckWhiteCastleSquares = [57, 58, 59, 61, 62]
 CheckBlackCastleSquares = [1, 2, 3, 5, 6]
 
-EnPassant = []
+EnPassantTotal = []
+EnPassantStored = []
 
 #Calc pseudo legal moves (alle moves zonder dat er met schaak, en passant of rokeren te maken heeft), moves voor specific pieces komt in andere functie
 def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
@@ -128,8 +129,26 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                         LegalMoves[2].append(True)    
                         
                         #passanten terrein
-                        
-                        
+                        prit
+                        if len(EnPassantStored) == 1 and (PieceIndex + 1 == EnPassantStored[0] or PieceIndex -1 == EnPassantStored[0]):
+                            print(PieceIndex)
+                            if Side == 1:
+                                print(EnPassantStored, "w", Board120x[0][Board64x[0][PieceIndex]])
+                                
+                                IndexNumber120xEnPassant = EnPassantStored[0] - 8
+                                
+                            else:
+                                print(EnPassantStored, "b", PieceIndex)
+                               
+                                IndexNumber120xEnPassant = EnPassantStored[0] + 8
+                                
+                            
+
+                            LegalMoves[0].append(PieceIndex)
+                            LegalMoves[1].append(IndexNumber120xEnPassant)
+                            LegalMoves[2].append(True)
+                            EnPassantStored.clear()
+                            
                         
 
 
@@ -146,6 +165,8 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                             LegalMoves[0].append(PieceIndex)
                             LegalMoves[1].append(IndexNumber120xDouble)
                             LegalMoves[2].append(False)
+                            if IndexNumber120xDouble not in EnPassantTotal:
+                                EnPassantTotal.append(IndexNumber120xDouble)
                         
                         if BoardConfig[1][IndexNumber120xSingle] == 0 and IndexNumber120xSingle != -1: 
                             LegalMoves[0].append(PieceIndex)
@@ -253,7 +274,11 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves):
         BoardConfig[0][InputFromSquare] = 0
         BoardConfig[1][InputFromSquare] = 0
 
-
+        #logic voor enpassant
+        if InputToSquare in EnPassantTotal:
+            
+            EnPassantStored.append(InputToSquare)
+        EnPassantTotal.clear()
             
         if LegalMoves[2][PieceIndex] == True:
             Capture = ((BoardConfig[0][InputToSquare], BoardConfig[1][InputToSquare]))
