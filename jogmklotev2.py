@@ -52,7 +52,7 @@ def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):
             BoardConfigReset = [x[:] for x in BoardConfig]
             BoardConfigReset = engine.MakeMoveCalculations(legalmoves[0][move], legalmoves[1][move], BoardConfigReset, legalmoves)
             SubNodes = perft(depth - 1, BoardConfigReset, Side, KQkqCanCastle, DivideDepth)
-            print(Functions.InvSquareNumb(legalmoves[0][move]), Functions.InvSquareNumb(legalmoves[1][move]), ":",SubNodes)
+            print(str(Functions.InvSquareNumb(legalmoves[0][move])) + str(Functions.InvSquareNumb(legalmoves[1][move])) + ": " + str(SubNodes))
             #Functions.PrintChessBoard(BoardConfigReset)
             count += SubNodes
            

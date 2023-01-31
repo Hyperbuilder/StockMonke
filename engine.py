@@ -59,7 +59,7 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                 if IndexNumber120x == -1: break
 
                                 if Piece == 6:
-                                    if Side == 1:
+                                    if Side == 2:
                                         if KQkqCanCastle[0] == True:
                                             if BoardConfig[1][5] == 0 and BoardConfig[1][6] == 0:
                                                 print("K Castle")
@@ -73,7 +73,7 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                                 LegalMoves[0].append(PieceIndex)
                                                 LegalMoves[1].append(2)
                                                 LegalMoves[2].append(False)       
-                                    elif Side == 2:
+                                    elif Side == 1:
                                         if KQkqCanCastle[2] == True:
                                             if BoardConfig[1][61] == 0 and BoardConfig[1][62] == 0:
                                                 print("K Castle")
