@@ -11,11 +11,10 @@ FEN = input("Insert FEN: ")
 
 if FEN == "def":
         FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq'
+elif FEN == "cas":
+    FEN = 'rnbqk1nr/ppp2ppp/3p4/4p3/1bB1P3/5N2/PPPP1PPP/RNBQK2R w KQkq'
 
 BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
-
-WhiteToMove = Functions.ConvertFENString(FEN)[1]
-
 KQkqcanCastle = [True, True, True, True]
 
 #Standaard waarden voor venster en schaakbord
@@ -58,15 +57,17 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((width,height));
     clock = pygame.time.Clock()
+
     gameRunning = True
+
     sysfont = pygame.font.get_default_font()
     fontSize = int(squareHeight//3)
     font = pygame.font.SysFont(sysfont, fontSize)
-
     images = Functions.imageLoader(squareWidth, squareHeight)
+
     HasSelectedPiece = [False, None, None]
-    WhiteToMove = True
     CapturedPieces = []
+    WhiteToMove = Functions.ConvertFENString(FEN)[1]
 
     while gameRunning:
         Side, notSide = Functions.WhiteToMoveTONumber(WhiteToMove)
@@ -90,7 +91,7 @@ def main():
                 elif mouseBoardLocation == HasSelectedPiece[2]:
                     HasSelectedPiece = [False, None, None]
                 elif HasSelectedPiece[0] == True and mouseBoardLocation != HasSelectedPiece[2]:
-                    moveresult = engine.SelectMoveTo(HasSelectedPiece[2], mouseBoardLocation, BoardConfig, HasSelectedPiece[1])
+                    moveresult = engine.SelectMoveTo(HasSelectedPiece[2], mouseBoardLocation, BoardConfig, HasSelectedPiece[1], KQkqcanCastle)
 
 
                     if moveresult[0] == True:
