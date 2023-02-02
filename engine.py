@@ -32,7 +32,7 @@ CheckWhiteCastleSquares = [57, 58, 59, 61, 62]
 CheckBlackCastleSquares = [1, 2, 3, 5, 6]
 
 EnPassantTotal = []
-EnPassantStored = []
+EnPassantStored = 0
 
 #Calc pseudo legal moves (alle moves zonder dat er met schaak, en passant of rokeren te maken heeft), moves voor specific pieces komt in andere functie
 def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
@@ -62,27 +62,23 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                     if Side == 2:
                                         if KQkqCanCastle[0] == True:
                                             if BoardConfig[1][5] == 0 and BoardConfig[1][6] == 0:
-                                                print("K Castle")
                                                 LegalMoves[0].append(PieceIndex)
                                                 LegalMoves[1].append(5)
                                                 LegalMoves[2].append(False)    
                                         if KQkqCanCastle[1] == True:
                                             
                                             if BoardConfig[1][1] == 0 and BoardConfig[1][2] == 0 and BoardConfig[1][3] == 0:
-                                                print("Q Castle")
                                                 LegalMoves[0].append(PieceIndex)
                                                 LegalMoves[1].append(2)
                                                 LegalMoves[2].append(False)       
                                     elif Side == 1:
                                         if KQkqCanCastle[2] == True:
                                             if BoardConfig[1][61] == 0 and BoardConfig[1][62] == 0:
-                                                print("K Castle")
                                                 LegalMoves[0].append(PieceIndex)
                                                 LegalMoves[1].append(62)
                                                 LegalMoves[2].append(False)    
                                         if KQkqCanCastle[3] == True:
                                             if BoardConfig[1][57] == 0 and BoardConfig[1][58] == 0 and BoardConfig[1][59] == 0:
-                                                print("Q Castle")
                                                 LegalMoves[0].append(PieceIndex)
                                                 LegalMoves[1].append(58)
                                                 LegalMoves[2].append(False)
@@ -129,8 +125,8 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                         LegalMoves[2].append(True)    
                         
                         #passanten terrein
-                        if len(EnPassantStored) == 1 and (PieceIndex + 1 == EnPassantStored[0] or PieceIndex -1 == EnPassantStored[0]):
-                            print(PieceIndex)
+                        if EnPassantStored != 0:  #and (PieceIndex + 1 == EnPassantStored[0] or PieceIndex - 1 == EnPassantStored[0])
+                            print(EnPassantStored)
                             if Side == 1:
                                 print(EnPassantStored, "w", Board120x[0][Board64x[0][PieceIndex]])
                                 
@@ -248,6 +244,12 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves):
         
         PieceIndex = LegalMoves[1].index(InputToSquare)
 
+        if BoardConfig[0][InputFromSquare] == 6:
+            Side = BoardConfig[0][InputFromSquare]
+            if Side == 1: 
+                KQkqCanCastl = False
+            
+
         #Promotion system
         if BoardConfig[0][InputFromSquare] == 1 and InputToSquare in CheckPawnPromotion:
             PromoteToPiece = input("Promote to (NBRQ): ")
@@ -273,8 +275,7 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves):
 
         #logic voor enpassant
         if InputToSquare in EnPassantTotal:
-            
-            EnPassantStored.append(InputToSquare)
+            EnPassantStored = InputToSquare
         EnPassantTotal.clear()
             
         if LegalMoves[2][PieceIndex] == True:
