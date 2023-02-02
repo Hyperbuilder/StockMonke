@@ -83,11 +83,6 @@ def main():
                     if BoardConfig[0][mouseBoardLocation] != 0:
                         if BoardConfig[1][mouseBoardLocation] == Side:
                             HasSelectedPiece = engine.SelectPiece(mouseBoardLocation, BoardConfig, WhiteToMove, KQkqcanCastle)
-                            if HasSelectedPiece[1] == None:
-                                gameRunning = False
-                                #if input("Reset? (Y/N): ").lower() == 'y':
-                                #    os.execv(sys.argv[0], sys.argv)
-                                break
                 elif mouseBoardLocation == HasSelectedPiece[2]:
                     HasSelectedPiece = [False, None, None]
                 elif HasSelectedPiece[0] == True and mouseBoardLocation != HasSelectedPiece[2]:
@@ -97,7 +92,6 @@ def main():
                     if moveresult[0] == True:
                         CapturedPieces.append(moveresult[1])
                         WhiteToMove = not WhiteToMove
-                        #print(CapturedPieces)
                         HasSelectedPiece = [False, None, None]
                     else: 
                         print("not a possible move")

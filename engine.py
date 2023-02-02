@@ -1,5 +1,6 @@
 import csv
 import Functions
+import time
 
 #120x board importen
 Board120xFile = csv.reader(open('Board120x.csv', 'r'))
@@ -212,6 +213,7 @@ def SelectPiece(SquareFrom, BoardConfig, WhiteToMove, KQkqCanCastle):
     FinalLegalMoves = CalcFinalLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle)
 
 
+
     if FinalLegalMoves[1] == True:
         print('Game Over')
         return False, None, None
@@ -230,9 +232,6 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
         Side = BoardConfig[0][InputFromSquare]
 
         if BoardConfig[0][InputFromSquare] == 6:
-            print("King")
-            print(KQkqCanCastle)
-            print(Side)
             if InputFromSquare == 4 and InputToSquare == 1 and KQkqCanCastle[3] == True:
                 BoardConfig[0][2] = 6
                 BoardConfig[1][2] = 2
