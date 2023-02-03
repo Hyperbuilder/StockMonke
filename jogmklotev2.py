@@ -20,7 +20,6 @@ DivideDepth = int(input("Divide Depth: "))
 
 
 
-
 #Perft Debug Fuction
 #NIET NAAR KIJKEN
 def perft(depth, BoardConfig, WhiteToMove, KQkqCanCastle, DivideDepth=3):

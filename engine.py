@@ -102,7 +102,6 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                     else: #pawn moves
                        
                         for AmountOffsetDirLoop in range(2):
-                            if BoardConfig[1][PieceIndex] == 0: break
                             if BoardConfig[1][PieceIndex] == 1:
                                 IndexNumber = Board64x[0][PieceIndex] + OffsetValues[Piece][AmountOffsetDirLoop]
                             else:
@@ -113,9 +112,9 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                             else:
                                 break
 
-                            if IndexNumber120xCapture == -1: break
+                            #if IndexNumber120xCapture == -1: break
                             
-                            if BoardConfig[1][IndexNumber120xCapture] != 0:
+                            if BoardConfig[1][IndexNumber120xCapture] != 0 and IndexNumber120xCapture != -1:
                                 if BoardConfig[1][IndexNumber120xCapture] == NotSide:
                                         LegalMoves[0].append(PieceIndex)
                                         LegalMoves[1].append(IndexNumber120xCapture)
@@ -161,6 +160,7 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                             
          
     return LegalMoves
+
 
 
 
@@ -352,20 +352,22 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
 def MakeMoveCalculations(InputFromSquare, InputToSquare, InitBoardConfig, LegalMoves):
     BoardConfig = InitBoardConfig[:]
     PieceIndex = LegalMoves[1].index(InputToSquare)
+    
 
     if InputToSquare in LegalMoves[1]:
         BoardConfig[0][InputToSquare] = BoardConfig[0][InputFromSquare]
         BoardConfig[1][InputToSquare] = BoardConfig[1][InputFromSquare]
 
-        if LegalMoves[2][PieceIndex] == True  and BoardConfig[0][InputFromSquare] == 1:
-                if LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 9: 
-                    BoardConfig[0][LegalMoves[1][PieceIndex] + 8] = 0
-                    BoardConfig[1][LegalMoves[1][PieceIndex] + 8] = 0
-
-                if LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -9:
-                    BoardConfig[0][LegalMoves[1][PieceIndex] - 8] = 0
-                    BoardConfig[1][LegalMoves[1][PieceIndex] - 8] = 0
-    
+        if LegalMoves[2][PieceIndex] == True and InitBoardConfig[0][InputFromSquare] == 1:
+            print(LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex])
+            if LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 9: 
+                BoardConfig[0][LegalMoves[1][PieceIndex] + 8] = 0
+                BoardConfig[1][LegalMoves[1][PieceIndex] + 8] = 0
+                
+            if LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -9:
+                BoardConfig[0][LegalMoves[1][PieceIndex] - 8] = 0
+                BoardConfig[1][LegalMoves[1][PieceIndex] - 8] = 0
+                
         
         BoardConfig[0][InputFromSquare] = 0
         BoardConfig[1][InputFromSquare] = 0

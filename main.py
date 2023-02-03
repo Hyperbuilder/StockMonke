@@ -18,8 +18,8 @@ BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
 KQkqcanCastle = [True, True, True, True]
 
 #Standaard waarden voor venster en schaakbord
-width = 512 *2
-height = 512 *2
+width = 512 *1
+height = 512 *1
 xDimension = 8
 yDimension = 8
 squareWidth = width / xDimension
