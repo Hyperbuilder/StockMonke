@@ -18,7 +18,7 @@ depth = int(input("Depth: "))
 DivideDepth = int(input("Divide Depth: "))
 #engine.CalcFinalLegalMoves(BoardConfig, WhiteToMove)
 
-
+Functions.PrintChessBoard(BoardConfig)
 
 #Perft Debug Fuction
 #NIET NAAR KIJKEN

@@ -111,8 +111,6 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                 IndexNumber120xCapture = Board120x[0][IndexNumber]
                             else:
                                 break
-
-                            #if IndexNumber120xCapture == -1: break
                             
                             if BoardConfig[1][IndexNumber120xCapture] != 0 and IndexNumber120xCapture != -1:
                                 if BoardConfig[1][IndexNumber120xCapture] == NotSide:
@@ -210,10 +208,8 @@ def CalcFinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
   
 
 def SelectPiece(SquareFrom, BoardConfig, WhiteToMove, KQkqCanCastle):
+
     FinalLegalMoves = CalcFinalLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle)
-
-
-
     if FinalLegalMoves[1] == True:
         print('Game Over')
         return False, None, None
@@ -231,61 +227,16 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
 
         Side = BoardConfig[0][InputFromSquare]
 
+
         if BoardConfig[0][InputFromSquare] == 6:
-            if InputFromSquare == 4 and InputToSquare == 1 and KQkqCanCastle[3] == True:
-                BoardConfig[0][2] = 6
-                BoardConfig[1][2] = 2
-                BoardConfig[0][3] = 4
-                BoardConfig[1][3] = 2
-
-                BoardConfig[0][4] = 0
-                BoardConfig[1][4] = 0
-                BoardConfig[0][0] = 0
-                BoardConfig[1][0] = 0
-
-            #Black
-            elif InputFromSquare == 4 and InputToSquare == 6 and KQkqCanCastle[2] == True:
-                BoardConfig[0][6] = 6
-                BoardConfig[1][6] = 2
-                BoardConfig[0][5] = 4
-                BoardConfig[1][5] = 2
-
-                BoardConfig[0][4] = 0
-                BoardConfig[1][4] = 0
-                BoardConfig[0][7] = 0
-                BoardConfig[1][7] = 0
-
-            #White QueenSide
-            elif InputFromSquare == 60 and InputToSquare == 58 and KQkqCanCastle[1] == True:
-                BoardConfig[0][58] = 6
-                BoardConfig[1][58] = 1
-                BoardConfig[0][59] = 4
-                BoardConfig[1][59] = 1
-
-                BoardConfig[0][60] = 0
-                BoardConfig[1][60] = 0
-                BoardConfig[0][56] = 0
-                BoardConfig[1][56] = 0
-                
-            #White Kingside
-            elif InputFromSquare == 60 and InputToSquare == 62 and KQkqCanCastle[0] == True:
-                BoardConfig[0][62] = 6
-                BoardConfig[1][62] = 1
-                BoardConfig[0][61] = 4
-                BoardConfig[1][61] = 1
-
-                BoardConfig[0][60] = 0
-                BoardConfig[1][60] = 0
-                BoardConfig[0][63] = 0
-                BoardConfig[1][63] = 0
-
-                
+            Functions.CastleMoveFunction(BoardConfig, InputFromSquare, InputToSquare, KQkqCanCastle)
+            
             if Side == 1: 
                 KQkqCanCastle[0] = False
                 KQkqCanCastle[1] = False
             elif Side == 2: 
                 KQkqCanCastle[2] = False
-                KQkqCanCastle[3] = False      
+                KQkqCanCastle[3] = False   
         elif BoardConfig[0][InputFromSquare] == 4 and (KQkqCanCastle[0] == True or KQkqCanCastle[1] == True or KQkqCanCastle[2] == True or KQkqCanCastle[3] == True):
             if InputFromSquare == 0:
                 KQkqCanCastle[3] = False
@@ -295,7 +246,6 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
                 KQkqCanCastle[1] = False
             elif InputFromSquare == 63:
                 KQkqCanCastle[0] = False
-    
         #Promotion system
         elif BoardConfig[0][InputFromSquare] == 1 and InputToSquare in CheckPawnPromotion:
             PromoteToPiece = input("Promote to (NBRQ): ")
@@ -326,16 +276,14 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
         #captures
         if LegalMoves[2][PieceIndex] == True:
             Capture = ((BoardConfig[0][InputToSquare], BoardConfig[1][InputToSquare]))
-            print("nuts")
             
-            print(LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex], BoardConfig[0][InputFromSquare])
 
             if BoardConfig[0][InputFromSquare] == 1:
-                if LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 9: 
+                if (LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 9) and InputFromSquare: 
                     BoardConfig[0][LegalMoves[1][PieceIndex] + 8] = 0
                     BoardConfig[1][LegalMoves[1][PieceIndex] + 8] = 0
 
-                if LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -9:
+                if (LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -9):
                     BoardConfig[0][LegalMoves[1][PieceIndex] - 8] = 0
                     BoardConfig[1][LegalMoves[1][PieceIndex] - 8] = 0
     
@@ -349,24 +297,32 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
 
 #zelfde functie maar dan voor berekenen bij perft of checks
 
+PlayedMovesPERFT = [[],[],[],[]]
+
 def MakeMoveCalculations(InputFromSquare, InputToSquare, InitBoardConfig, LegalMoves):
     BoardConfig = InitBoardConfig[:]
     PieceIndex = LegalMoves[1].index(InputToSquare)
     
 
     if InputToSquare in LegalMoves[1]:
+
         BoardConfig[0][InputToSquare] = BoardConfig[0][InputFromSquare]
         BoardConfig[1][InputToSquare] = BoardConfig[1][InputFromSquare]
+ 
+        # if LegalMoves[2][PieceIndex] == True and BoardConfig[0][InputFromSquare] == 1:
+            
+        #         if (LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 9) and BoardConfig[0][LegalMoves[1][PieceIndex] + 8] == 1: 
+        #             print(LegalMoves[1][PieceIndex])
+        #             Functions.PrintChessBoard(BoardConfig)
+        #             # BoardConfig[0][LegalMoves[1][PieceIndex] - 8] = 0
+        #             # BoardConfig[1][LegalMoves[1][PieceIndex] - 8] = 0
+                    
+                    
 
-        if LegalMoves[2][PieceIndex] == True and InitBoardConfig[0][InputFromSquare] == 1:
-            print(LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex])
-            if LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 9: 
-                BoardConfig[0][LegalMoves[1][PieceIndex] + 8] = 0
-                BoardConfig[1][LegalMoves[1][PieceIndex] + 8] = 0
-                
-            if LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -9:
-                BoardConfig[0][LegalMoves[1][PieceIndex] - 8] = 0
-                BoardConfig[1][LegalMoves[1][PieceIndex] - 8] = 0
+        #         if (LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -9) and BoardConfig[0][LegalMoves[1][PieceIndex] - 8] == 1:
+        #             print(BoardConfig[0][LegalMoves[1][PieceIndex] - 8])
+        #             # BoardConfig[0][LegalMoves[1][PieceIndex] + 8] = 0
+        #             # BoardConfig[1][LegalMoves[1][PieceIndex] + 8] = 0
                 
         
         BoardConfig[0][InputFromSquare] = 0

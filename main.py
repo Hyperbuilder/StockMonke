@@ -12,14 +12,14 @@ FEN = input("Insert FEN: ")
 if FEN == "def":
         FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq'
 elif FEN == "cas":
-    FEN = 'rnbqk1nr/ppp2ppp/3p4/4p3/1bB1P3/5N2/PPPP1PPP/RNBQK2R w KQkq'
+    FEN = "rnbqk1nr/ppp2ppp/3p4/4p3/1bB1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 0"
 
 BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
-KQkqcanCastle = [True, True, True, True]
+KQkqcanCastle = Functions.ConvertFENString(FEN)[2]
 
 #Standaard waarden voor venster en schaakbord
-width = 512 *1
-height = 512 *1
+width = 512 * 2
+height = 512 * 2
 xDimension = 8
 yDimension = 8
 squareWidth = width / xDimension
@@ -87,14 +87,12 @@ def main():
                     HasSelectedPiece = [False, None, None]
                 elif HasSelectedPiece[0] == True and mouseBoardLocation != HasSelectedPiece[2]:
                     moveresult = engine.SelectMoveTo(HasSelectedPiece[2], mouseBoardLocation, BoardConfig, HasSelectedPiece[1], KQkqcanCastle)
-
-
                     if moveresult[0] == True:
                         CapturedPieces.append(moveresult[1])
                         WhiteToMove = not WhiteToMove
                         HasSelectedPiece = [False, None, None]
                     else: 
-                        print("not a possible move")
+                        print("Move not Legal! ♜ Try again!")
 
         drawScreen(screen, font, selectedBoardTheme, BoardConfig, images, HasSelectedPiece)
 

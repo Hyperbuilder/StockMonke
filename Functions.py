@@ -157,3 +157,51 @@ def brdnumtorowcol(number):
     column = number // 8
     row = number - column*8
     return row, column
+
+def CastleMoveFunction(BoardConfig, InputFromSquare, InputToSquare, KQkqCanCastle):
+    if InputFromSquare == 4 and InputToSquare == 1 and KQkqCanCastle[3] == True:
+        BoardConfig[0][2] = 6
+        BoardConfig[1][2] = 2
+        BoardConfig[0][3] = 4
+        BoardConfig[1][3] = 2
+
+        BoardConfig[0][4] = 0
+        BoardConfig[1][4] = 0
+        BoardConfig[0][0] = 0
+        BoardConfig[1][0] = 0
+
+            #Black
+    elif InputFromSquare == 4 and InputToSquare == 6 and KQkqCanCastle[2] == True:
+        BoardConfig[0][6] = 6
+        BoardConfig[1][6] = 2
+        BoardConfig[0][5] = 4
+        BoardConfig[1][5] = 2
+
+        BoardConfig[0][4] = 0
+        BoardConfig[1][4] = 0
+        BoardConfig[0][7] = 0
+        BoardConfig[1][7] = 0
+
+            #White QueenSide
+    elif InputFromSquare == 60 and InputToSquare == 58 and KQkqCanCastle[1] == True:
+        BoardConfig[0][58] = 6
+        BoardConfig[1][58] = 1
+        BoardConfig[0][59] = 4
+        BoardConfig[1][59] = 1
+
+        BoardConfig[0][60] = 0
+        BoardConfig[1][60] = 0
+        BoardConfig[0][56] = 0
+        BoardConfig[1][56] = 0
+        
+            #White Kingside
+    elif InputFromSquare == 60 and InputToSquare == 62 and KQkqCanCastle[0] == True:
+        BoardConfig[0][62] = 6
+        BoardConfig[1][62] = 1
+        BoardConfig[0][61] = 4
+        BoardConfig[1][61] = 1
+
+        BoardConfig[0][60] = 0
+        BoardConfig[1][60] = 0
+        BoardConfig[0][63] = 0
+        BoardConfig[1][63] = 0
