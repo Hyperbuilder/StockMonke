@@ -3,6 +3,7 @@ import engine
 import Functions
 
 # Invullen van FEN string
+Dimensions = int(input("512px: Type (1), 1024px Type: (2); Higher or Lower Functions might break something"))
 FEN = input("Insert FEN (Type: (def) for standard position; Type: (PERFT) for PERFT Debug): ")
 
 if FEN == "def":
@@ -17,8 +18,8 @@ BoardConfig = [list(map(int, i)) for i in Functions.ConvertFENString(FEN)[0]]
 KQkqcanCastle = Functions.ConvertFENString(FEN)[2]
 
 # Standaard waarden voor venster en schaakbord
-width = 512 * 2
-height = 512 * 2
+width = 512 * Dimensions
+height = 512 * Dimensions
 xDimension = 8
 yDimension = 8
 squareWidth = width / xDimension
