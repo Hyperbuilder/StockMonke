@@ -3,7 +3,7 @@ import engine
 import Functions
 
 # Invullen van FEN string
-Dimensions = int(input("512px: Type (1), 1024px Type: (2); Higher or Lower Functions might break something"))
+Dimensions = int(input("Window Size: 512px: Type (1); 1024px Type: (2): "))
 FEN = input("Insert FEN (Type: (def) for standard position; Type: (PERFT) for PERFT Debug): ")
 
 if FEN == "def":
