@@ -1,8 +1,8 @@
-import math
 import pygame
 
+# Dictionary voor het printen van posities voor debug
 PieceDict = {
-        #stukken
+        # stukken
         0 : '.',
         1 : 'P',
         2 : 'N',
@@ -11,12 +11,14 @@ PieceDict = {
         5 : 'Q',
         6 : 'K',
 
-        #kleuren
+        # kleuren
         7 : '.',
         8 : 'W',
         9 : 'B'
     }
 
+
+# Importeren van FEN string
 def ConvertFENString(FEN):
     
     Board = [[],[]]
@@ -75,12 +77,13 @@ def ConvertFENString(FEN):
 
 
 
+# Omzetten van vakje (bijv a4) naar nummer in list
 def SquareNumb(Square):
     File = ord(Square[0]) - ord('a')
     Rank = 8 - int(Square[1])
     return Rank * 8 + File
 
-
+# Omzetten van nummer in list naar vakje
 def InvSquareNumb(Square):
     FileNum = Square % 8
     RankNum = 8 - Square // 8
@@ -89,7 +92,7 @@ def InvSquareNumb(Square):
     return File + Rank
 
 
-#functies voor debuggen zoals printen'
+# Functies voor debuggen zoals printen
 def PrintChessBoard(BoardConfig):
     for i in range(8):
         for j in range(8):
@@ -125,6 +128,7 @@ def PrintLegalMoveList(LegalMoves):
     print("Amount of Legal Moves: ", len(LegalMoves[0]))
     
 
+# Wiens beurt het is
 def WhiteToMoveTONumber(whiteToMove):
     if whiteToMove:
         Side = 1
@@ -134,6 +138,8 @@ def WhiteToMoveTONumber(whiteToMove):
         NotSide = 1
     return Side, NotSide
 
+
+# Blit functions to display game using Pygame
 def imageLoader(squareWidth, squareHeight):
     images = {}
     pieces = ['PW', 'RW', 'NW', 'BW', 'QW', 'KW', 'PB', 'RB', 'NB', 'BB', 'QB', 'KB']
@@ -158,6 +164,8 @@ def brdnumtorowcol(number):
     row = number - column*8
     return row, column
 
+
+# Functie voor castlen (niet gebruikt)
 def CastleMoveFunction(BoardConfig, InputFromSquare, InputToSquare, KQkqCanCastle):
     if InputFromSquare == 4 and InputToSquare == 1 and KQkqCanCastle[3] == True:
         BoardConfig[0][2] = 6
@@ -170,7 +178,7 @@ def CastleMoveFunction(BoardConfig, InputFromSquare, InputToSquare, KQkqCanCastl
         BoardConfig[0][0] = 0
         BoardConfig[1][0] = 0
 
-            #Black
+            # Black
     elif InputFromSquare == 4 and InputToSquare == 6 and KQkqCanCastle[2] == True:
         BoardConfig[0][6] = 6
         BoardConfig[1][6] = 2
@@ -182,7 +190,7 @@ def CastleMoveFunction(BoardConfig, InputFromSquare, InputToSquare, KQkqCanCastl
         BoardConfig[0][7] = 0
         BoardConfig[1][7] = 0
 
-            #White QueenSide
+            # White QueenSide
     elif InputFromSquare == 60 and InputToSquare == 58 and KQkqCanCastle[1] == True:
         BoardConfig[0][58] = 6
         BoardConfig[1][58] = 1
@@ -194,7 +202,7 @@ def CastleMoveFunction(BoardConfig, InputFromSquare, InputToSquare, KQkqCanCastl
         BoardConfig[0][56] = 0
         BoardConfig[1][56] = 0
         
-            #White Kingside
+            # White Kingside
     elif InputFromSquare == 60 and InputToSquare == 62 and KQkqCanCastle[0] == True:
         BoardConfig[0][62] = 6
         BoardConfig[1][62] = 1

@@ -1,16 +1,15 @@
 import csv
 import Functions
-import time
 
-#120x board importen
+# 120x board importen
 Board120xFile = csv.reader(open('Board120x.csv', 'r'))
 Board120x = [list(map(int, i)) for i in Board120xFile]
 
-#64x board importen
+# 64x board importen
 Board64xFile = csv.reader(open('Board64x.csv', 'r'))
 Board64x = [list(map(int, i)) for i in Board64xFile]
 
-#Constants
+# Constants
 IsSlidingPiece = [False, False, False, True, True, True, False] #Empty, Pawn, Knight, Bishop, Rook, Queen, King
 OffsetDirAmount = [0, 2, 8, 4, 4, 8, 8]
 OffsetValues = [
@@ -22,10 +21,10 @@ OffsetValues = [
     [-11, -10, -9, -1, 1, 9, 10, 11],   #Queen
     [-11, -10, -9, -1, 1, 9, 10, 11]]   #King
 
-#kijken of pawn zich op eerste rij bevindt, zo ja double push mogelijk
+# kijken of pawn zich op eerste rij bevindt, zo ja double push mogelijk
 CheckPawnOnFirstRow = [81, 82, 83, 84, 85, 86, 87, 88, 31, 32, 33, 34, 35, 36, 37, 38]
 
-#Check of Pawn ToSquare de laatste row is.
+# Check of Pawn ToSquare de laatste row is.
 CheckPawnPromotion = [0, 1, 2, 3, 4, 5, 6, 7, 56, 57, 58, 59, 60, 61, 62, 63]
 
 CheckWhiteCastleSquares = [57, 58, 59, 61, 62]
@@ -33,7 +32,7 @@ CheckBlackCastleSquares = [1, 2, 3, 5, 6]
 
 PlayedMoves = [[],[],[],[]] #From, To, Piece, Side
 
-#Calc pseudo legal moves (alle moves zonder dat er met schaak, en passant of rokeren te maken heeft), moves voor specific pieces komt in andere functie
+# Calculate Pseudolegalmoves (Alle moves die mogelijk zijn op het bord (Schaak(mat) achterwege latend))
 def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
 
     LegalMoves = [[],[],[]]
@@ -43,6 +42,7 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
         if BoardConfig[1][PieceIndex] == Side:
                     Piece = BoardConfig[0][PieceIndex]
                     if Piece != 1:
+                        # Moves voor alle stukken behalve Pawns
                         for AmountOffsetDirLoop in range(OffsetDirAmount[Piece]):
                             for RayAttackLoop in range(1, 8):
                                 
@@ -55,30 +55,31 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
 
                                 if IndexNumber120x == -1: break
 
-                                if Piece == 6:
-                                    if Side == 2:
-                                        if KQkqCanCastle[2] == True:
-                                            if BoardConfig[1][5] == 0 and BoardConfig[1][6] == 0:
-                                                LegalMoves[0].append(PieceIndex)
-                                                LegalMoves[1].append(6)
-                                                LegalMoves[2].append(False)    
-                                        if KQkqCanCastle[3] == True:
+                                # Add CastleMoves to [Legalmoves]
+                                # if Piece == 6:
+                                #     if Side == 2:
+                                #         if KQkqCanCastle[2] == True:
+                                #             if BoardConfig[1][5] == 0 and BoardConfig[1][6] == 0:
+                                #                 LegalMoves[0].append(PieceIndex)
+                                #                 LegalMoves[1].append(6)
+                                #                 LegalMoves[2].append(False)    
+                                #         if KQkqCanCastle[3] == True:
                                             
-                                            if BoardConfig[1][1] == 0 and BoardConfig[1][2] == 0 and BoardConfig[1][3] == 0:
-                                                LegalMoves[0].append(PieceIndex)
-                                                LegalMoves[1].append(2)
-                                                LegalMoves[2].append(False)       
-                                    elif Side == 1:
-                                        if KQkqCanCastle[0] == True:
-                                            if BoardConfig[1][61] == 0 and BoardConfig[1][62] == 0:
-                                                LegalMoves[0].append(PieceIndex)
-                                                LegalMoves[1].append(62)
-                                                LegalMoves[2].append(False)    
-                                        if KQkqCanCastle[1] == True:
-                                            if BoardConfig[1][57] == 0 and BoardConfig[1][58] == 0 and BoardConfig[1][59] == 0:
-                                                LegalMoves[0].append(PieceIndex)
-                                                LegalMoves[1].append(58)
-                                                LegalMoves[2].append(False)
+                                #             if BoardConfig[1][1] == 0 and BoardConfig[1][2] == 0 and BoardConfig[1][3] == 0:
+                                #                 LegalMoves[0].append(PieceIndex)
+                                #                 LegalMoves[1].append(2)
+                                #                 LegalMoves[2].append(False)       
+                                #     elif Side == 1:
+                                #         if KQkqCanCastle[0] == True:
+                                #             if BoardConfig[1][61] == 0 and BoardConfig[1][62] == 0:
+                                #                 LegalMoves[0].append(PieceIndex)
+                                #                 LegalMoves[1].append(62)
+                                #                 LegalMoves[2].append(False)    
+                                #         if KQkqCanCastle[1] == True:
+                                #             if BoardConfig[1][57] == 0 and BoardConfig[1][58] == 0 and BoardConfig[1][59] == 0:
+                                #                 LegalMoves[0].append(PieceIndex)
+                                #                 LegalMoves[1].append(58)
+                                #                 LegalMoves[2].append(False)
 
                                 if BoardConfig[1][IndexNumber120x] != 0:
                                     if BoardConfig[1][IndexNumber120x] == NotSide:
@@ -99,7 +100,7 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                                     
                                 if IsSlidingPiece[Piece] == False: break       
                                         
-                    else: #pawn moves
+                    else: # Pawn moves
                        
                         for AmountOffsetDirLoop in range(2):
                             if BoardConfig[1][PieceIndex] == 1:
@@ -140,28 +141,26 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
                             LegalMoves[2].append(False)
 
 
-                        #passanten terrein
-                        if len(PlayedMoves[0]) != 0:
-                            PreviousMove = [[],[],[],[]]
-                            for i in range(4):
-                                PreviousMove[i] = PlayedMoves[i][-1:][0]
-                            if (PreviousMove[0] - PreviousMove[1] == 16 or PreviousMove[0] - PreviousMove[1] == -16) and PreviousMove[2] == 1 and PreviousMove[3] == NotSide: 
-                                if Side == 1 and (PieceIndex - 1 == PreviousMove[1] or PieceIndex + 1 == PreviousMove[1]):
-                                    LegalMoves[0].append(PieceIndex)
-                                    LegalMoves[1].append(PreviousMove[1] - 8)
-                                    LegalMoves[2].append(True)
-                                elif Side == 2 and (PieceIndex - 1 == PreviousMove[1] or PieceIndex + 1 == PreviousMove[1]):
-                                    LegalMoves[0].append(PieceIndex)
-                                    LegalMoves[1].append(PreviousMove[1] + 8)
-                                    LegalMoves[2].append(True)
-                                
-                            
-         
+                        # Add Enpassant Moves to [Legalmoves]
+                        # if len(PlayedMoves[0]) != 0:
+                        #     PreviousMove = [[],[],[],[]]
+                        #     for i in range(4):
+                        #         PreviousMove[i] = PlayedMoves[i][-1:][0]
+                        #     if (PreviousMove[0] - PreviousMove[1] == 16 or PreviousMove[0] - PreviousMove[1] == -16) and PreviousMove[2] == 1 and PreviousMove[3] == NotSide: 
+                        #         if Side == 1 and (PieceIndex - 1 == PreviousMove[1] or PieceIndex + 1 == PreviousMove[1]):
+                        #             LegalMoves[0].append(PieceIndex)
+                        #             LegalMoves[1].append(PreviousMove[1] - 8)
+                        #             LegalMoves[2].append(True)
+                        #         elif Side == 2 and (PieceIndex - 1 == PreviousMove[1] or PieceIndex + 1 == PreviousMove[1]):
+                        #             LegalMoves[0].append(PieceIndex)
+                        #             LegalMoves[1].append(PreviousMove[1] + 8)
+                        #             LegalMoves[2].append(True)
+    #return list of all Legalmoves  
     return LegalMoves
 
 
 
-
+# Filter legalmoves so only the Legalmoves for the selected piece will be displayed
 def PieceSpecificMoves(SelectedPiece, LegalMoves):
     PieceSpecificLegalMoves = [[], [], []]
     for selectedPieceIndexPos, selectedPiece in enumerate(LegalMoves[0]):
@@ -175,7 +174,8 @@ def PieceSpecificMoves(SelectedPiece, LegalMoves):
 def CalcFinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
     LegalMoves = InitPseudoLegalMoves = CalcPseudoLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle)
     IllegalMoves = []
-     
+
+    #Check if X's king can be captured after X's move, If yes: The move will be declared illegal since the move will put the king in check since Y can capture the move
     for PossibleMove in range(len(InitPseudoLegalMoves[0])):
         InitBoardConfig  = [x[:] for x in InputInitBoardConfig]
         FirstItBoardConfig = MakeMoveCalculations(InitPseudoLegalMoves[0][PossibleMove], InitPseudoLegalMoves[1][PossibleMove], InitBoardConfig, InitPseudoLegalMoves)[:]
@@ -198,13 +198,14 @@ def CalcFinalLegalMoves(InputInitBoardConfig, WhiteToMove, KQkqCanCastle):
     
     AmountOfMoves = len(LegalMoves[0])
 
-    isCheckmate = False
+    isCheckmateorStalemate = False
 
+    # Check for Checkmate/Stalemate
     if len(LegalMoves[0]) == 0:
-        isCheckmate = True
+        isCheckmateorStalemate = True
         print(LegalMoves)
 
-    return LegalMoves, isCheckmate, AmountOfMoves
+    return LegalMoves, isCheckmateorStalemate, AmountOfMoves
   
 
 def SelectPiece(SquareFrom, BoardConfig, WhiteToMove, KQkqCanCastle):
@@ -218,7 +219,7 @@ def SelectPiece(SquareFrom, BoardConfig, WhiteToMove, KQkqCanCastle):
         return True, LegalMovesForPiece, SquareFrom
 
 
-
+# Function moves Piece from InputFromSquare to InputToSquare.
 def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCanCastle):
     Capture = ()
     if InputToSquare in LegalMoves[1]:
@@ -227,27 +228,31 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
 
         Side = BoardConfig[0][InputFromSquare]
 
-
-        if BoardConfig[0][InputFromSquare] == 6:
-            Functions.CastleMoveFunction(BoardConfig, InputFromSquare, InputToSquare, KQkqCanCastle)
+        # Update Castle privilages If kingmove: king may not castle anymore
+        # if BoardConfig[0][InputFromSquare] == 6:
+        #     Functions.CastleMoveFunction(BoardConfig, InputFromSquare, InputToSquare, KQkqCanCastle)
             
-            if Side == 1: 
-                KQkqCanCastle[0] = False
-                KQkqCanCastle[1] = False
-            elif Side == 2: 
-                KQkqCanCastle[2] = False
-                KQkqCanCastle[3] = False   
-        elif BoardConfig[0][InputFromSquare] == 4 and (KQkqCanCastle[0] == True or KQkqCanCastle[1] == True or KQkqCanCastle[2] == True or KQkqCanCastle[3] == True):
-            if InputFromSquare == 0:
-                KQkqCanCastle[3] = False
-            elif InputFromSquare == 7:
-                KQkqCanCastle[2] = False
-            elif InputFromSquare == 56:
-                KQkqCanCastle[1] = False
-            elif InputFromSquare == 63:
-                KQkqCanCastle[0] = False
-        #Promotion system
-        elif BoardConfig[0][InputFromSquare] == 1 and InputToSquare in CheckPawnPromotion:
+        #     if Side == 1: 
+        #         KQkqCanCastle[0] = False
+        #         KQkqCanCastle[1] = False
+        #     elif Side == 2: 
+        #         KQkqCanCastle[2] = False
+        #         KQkqCanCastle[3] = False   
+
+        # Same for rook If rookmove: king cant castle to the corresponding side anymore
+        # elif BoardConfig[0][InputFromSquare] == 4 and (KQkqCanCastle[0] == True or KQkqCanCastle[1] == True or KQkqCanCastle[2] == True or KQkqCanCastle[3] == True):
+        #     if InputFromSquare == 0:
+        #         KQkqCanCastle[3] = False
+        #     elif InputFromSquare == 7:
+        #         KQkqCanCastle[2] = False
+        #     elif InputFromSquare == 56:
+        #         KQkqCanCastle[1] = False
+        #     elif InputFromSquare == 63:
+        #         KQkqCanCastle[0] = False
+
+        # Promotion system
+        # Check if pawn reached the backrank, If yes: Ask in terminal what piece will be Promoted to.
+        if BoardConfig[0][InputFromSquare] == 1 and InputToSquare in CheckPawnPromotion:
             PromoteToPiece = input("Promote to (NBRQ): ")
             if PromoteToPiece.lower() == 'n':
                 BoardConfig[0][InputToSquare] = 2
@@ -266,28 +271,27 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
             BoardConfig[1][InputToSquare] = BoardConfig[1][InputFromSquare]
 
         
-        #Sla de gespeelde zet op
+        # Store played move (Later voor PGN Documentation)
         PlayedMoves[0].append(InputFromSquare)
         PlayedMoves[1].append(InputToSquare)
         PlayedMoves[2].append(BoardConfig[0][InputFromSquare])
         PlayedMoves[3].append(BoardConfig[1][InputFromSquare])
     
 
-        #captures
+        # Captures, Put captured piece in (Tuple) to return
         if LegalMoves[2][PieceIndex] == True:
             Capture = ((BoardConfig[0][InputToSquare], BoardConfig[1][InputToSquare]))
             
+            # if BoardConfig[0][InputFromSquare] == 1:
+            #     if (LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 9) and InputFromSquare: 
+            #         BoardConfig[0][LegalMoves[1][PieceIndex] + 8] = 0
+            #         BoardConfig[1][LegalMoves[1][PieceIndex] + 8] = 0
 
-            if BoardConfig[0][InputFromSquare] == 1:
-                if (LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == 9) and InputFromSquare: 
-                    BoardConfig[0][LegalMoves[1][PieceIndex] + 8] = 0
-                    BoardConfig[1][LegalMoves[1][PieceIndex] + 8] = 0
-
-                if (LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -9):
-                    BoardConfig[0][LegalMoves[1][PieceIndex] - 8] = 0
-                    BoardConfig[1][LegalMoves[1][PieceIndex] - 8] = 0
+            #     if (LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -7 or LegalMoves[0][PieceIndex] - LegalMoves[1][PieceIndex] == -9):
+            #         BoardConfig[0][LegalMoves[1][PieceIndex] - 8] = 0
+            #         BoardConfig[1][LegalMoves[1][PieceIndex] - 8] = 0
     
-        #Reset Square piece came from
+        # Reset the Square the piece came from
         BoardConfig[0][InputFromSquare] = 0
         BoardConfig[1][InputFromSquare] = 0
 
@@ -295,10 +299,10 @@ def SelectMoveTo(InputFromSquare, InputToSquare, BoardConfig, LegalMoves, KQkqCa
     else:
         return False, Capture
 
-#zelfde functie maar dan voor berekenen bij perft of checks
 
 PlayedMovesPERFT = [[],[],[],[]]
 
+# De zelfde functie als SelectMoveTo maar dan voor de PERFT function: Perft wordt gebruikt om de nauwkeurigheid van een engine te meten. https://www.chessprogramming.org/Perft_Results
 def MakeMoveCalculations(InputFromSquare, InputToSquare, InitBoardConfig, LegalMoves):
     BoardConfig = InitBoardConfig[:]
     PieceIndex = LegalMoves[1].index(InputToSquare)
