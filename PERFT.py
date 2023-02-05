@@ -63,4 +63,5 @@ if FEN == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq":
 		print(str(197281-perftresult) + " missing, expected 197281 recieved: " + str(perftresult))
 	elif depth == 5:
 		print(str(4865609-perftresult) + " missing, expected 4865609 recieved: " + str(perftresult))
+quit()
 
