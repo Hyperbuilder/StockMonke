@@ -55,31 +55,7 @@ def CalcPseudoLegalMoves(BoardConfig, WhiteToMove, KQkqCanCastle):
 
                                 if IndexNumber120x == -1: break
 
-                                # Add CastleMoves to [Legalmoves]
-                                # if Piece == 6:
-                                #     if Side == 2:
-                                #         if KQkqCanCastle[2] == True:
-                                #             if BoardConfig[1][5] == 0 and BoardConfig[1][6] == 0:
-                                #                 LegalMoves[0].append(PieceIndex)
-                                #                 LegalMoves[1].append(6)
-                                #                 LegalMoves[2].append(False)    
-                                #         if KQkqCanCastle[3] == True:
-                                            
-                                #             if BoardConfig[1][1] == 0 and BoardConfig[1][2] == 0 and BoardConfig[1][3] == 0:
-                                #                 LegalMoves[0].append(PieceIndex)
-                                #                 LegalMoves[1].append(2)
-                                #                 LegalMoves[2].append(False)       
-                                #     elif Side == 1:
-                                #         if KQkqCanCastle[0] == True:
-                                #             if BoardConfig[1][61] == 0 and BoardConfig[1][62] == 0:
-                                #                 LegalMoves[0].append(PieceIndex)
-                                #                 LegalMoves[1].append(62)
-                                #                 LegalMoves[2].append(False)    
-                                #         if KQkqCanCastle[1] == True:
-                                #             if BoardConfig[1][57] == 0 and BoardConfig[1][58] == 0 and BoardConfig[1][59] == 0:
-                                #                 LegalMoves[0].append(PieceIndex)
-                                #                 LegalMoves[1].append(58)
-                                #                 LegalMoves[2].append(False)
+                                CalcLegalCastles(BoardConfig, WhiteToMove, KQkqCanCastle)
 
                                 if BoardConfig[1][IndexNumber120x] != 0:
                                     if BoardConfig[1][IndexNumber120x] == NotSide:
@@ -334,4 +310,16 @@ def MakeMoveCalculations(InputFromSquare, InputToSquare, InitBoardConfig, LegalM
 
     return list(BoardConfig)
   
+
+def CalcLegalCastles():
+    pass
+
+def CastleMove():
+    pass
+
+def CalcEPmoves():
+    pass
+
+def EnPassMove():
+    pass
 
